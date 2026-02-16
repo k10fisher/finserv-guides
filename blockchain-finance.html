@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blockchain & DLT in Financial Services — Deep Dive</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,400&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0c10;--bg2:#12151c;--bg3:#1a1e28;--bgc:#161a24;--cy:#00e5c8;--am:#f0a830;--ro:#f05365;--bl:#4a9eff;--gn:#22c55e;--t1:#e8eaf0;--t2:#8a90a0;--tm:#555c70;--bd:#252a38;--bl2:#2e3548}
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}body{background:var(--bg);color:var(--t1);font-family:'IBM Plex Sans',sans-serif;font-weight:400;line-height:1.7;overflow-x:hidden}::selection{background:rgba(0,229,200,.25)}::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--bl2);border-radius:3px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,12,16,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--bd);padding:0 2rem}.nav-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px}.nav-logo{font-family:'DM Mono',monospace;font-size:.8rem;letter-spacing:.15em;text-transform:uppercase;color:var(--cy)}.nav-links{display:flex;gap:.2rem;list-style:none;flex-wrap:wrap}.nav-links a{color:var(--t2);text-decoration:none;font-size:.74rem;font-weight:500;padding:.35rem .6rem;border-radius:4px;transition:all .2s}.nav-links a:hover,.nav-links a.active{color:var(--t1);background:var(--bg3)}
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:8rem 2rem 4rem;position:relative;background:radial-gradient(ellipse at 20% 50%,rgba(0,229,200,.06) 0%,transparent 50%),radial-gradient(ellipse at 80% 20%,rgba(74,158,255,.04) 0%,transparent 50%)}.hero::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 99px,var(--bd) 99px,var(--bd) 100px),repeating-linear-gradient(90deg,transparent,transparent 99px,var(--bd) 99px,var(--bd) 100px);opacity:.12;pointer-events:none}.hero-content{max-width:1000px;margin:0 auto;position:relative;z-index:1}.hero-tag{font-family:'DM Mono',monospace;font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;color:var(--cy);margin-bottom:2rem;display:flex;align-items:center;gap:.75rem}.hero-tag::before{content:'';width:32px;height:1px;background:var(--cy)}.hero h1{font-family:'Fraunces',serif;font-size:clamp(2.4rem,5vw,4.2rem);font-weight:700;line-height:1.1;margin-bottom:1.5rem}.hero h1 span{background:linear-gradient(135deg,var(--cy),var(--bl));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.hero-sub{font-size:1.12rem;color:var(--t2);max-width:700px;line-height:1.8;font-weight:300}.hero-meta{margin-top:3rem;display:flex;gap:2rem;font-family:'DM Mono',monospace;font-size:.72rem;color:var(--tm);flex-wrap:wrap}.hero-meta strong{color:var(--t2);font-weight:500}
+.section{padding:5.5rem 2rem}.section-inner{max-width:1100px;margin:0 auto}.section-label{font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--cy);margin-bottom:1rem;display:flex;align-items:center;gap:.75rem}.section-label::before{content:attr(data-num);display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border:1px solid var(--cy);border-radius:4px;font-size:.65rem}.section h2{font-family:'Fraunces',serif;font-size:clamp(1.7rem,3.5vw,2.5rem);font-weight:500;margin-bottom:1.5rem;line-height:1.2}.section h3{font-family:'Fraunces',serif;font-size:1.12rem;margin:2rem 0 1rem;font-weight:500}.section p{color:var(--t2);font-size:.97rem;max-width:780px;line-height:1.8;margin-bottom:1.2rem;font-weight:300}.section p strong{color:var(--t1);font-weight:500}
+.tabs{margin-top:2rem}.tab-buttons{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.5rem;border-bottom:1px solid var(--bd);padding-bottom:1rem}.tab-btn{background:none;border:1px solid var(--bd);color:var(--t2);font-family:'IBM Plex Sans',sans-serif;font-size:.82rem;font-weight:500;padding:.5rem 1.1rem;border-radius:6px;cursor:pointer;transition:all .25s}.tab-btn:hover{border-color:var(--tm);color:var(--t1)}.tab-btn.active{background:var(--cy);color:var(--bg);border-color:var(--cy);font-weight:600}.tab-panel{display:none;animation:fu .3s ease}.tab-panel.active{display:block}@keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+pre{padding:1.2rem;overflow-x:auto;font-family:'DM Mono',monospace;font-size:.78rem;line-height:1.7;color:var(--t2)}.code-block{background:var(--bg2);border:1px solid var(--bd);border-radius:8px;overflow:hidden;margin:1.5rem 0}.code-header{display:flex;align-items:center;justify-content:space-between;padding:.6rem 1rem;background:var(--bg3);border-bottom:1px solid var(--bd)}.code-lang{font-family:'DM Mono',monospace;font-size:.68rem;color:var(--am);letter-spacing:.1em;text-transform:uppercase}.code-copy{background:none;border:1px solid var(--bd);color:var(--tm);font-family:'DM Mono',monospace;font-size:.65rem;padding:.25rem .6rem;border-radius:4px;cursor:pointer;transition:all .2s}.code-copy:hover{color:var(--t1);border-color:var(--tm)}.kw{color:var(--cy)}.str{color:var(--am)}.cmt{color:var(--tm);font-style:italic}.fn{color:var(--bl)}.num{color:var(--ro)}
+table.ct{width:100%;border-collapse:collapse;margin:2rem 0;font-size:.83rem}table.ct th{font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--cy);text-align:left;padding:.7rem .9rem;border-bottom:2px solid var(--bl2);background:var(--bg2)}table.ct td{padding:.7rem .9rem;border-bottom:1px solid var(--bd);color:var(--t2);vertical-align:top}table.ct tr:hover td{background:rgba(0,229,200,.02)}table.ct td:first-child{font-weight:500;color:var(--t1)}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.2rem;margin:2rem 0}.card-grid.tri{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}.ic{background:var(--bgc);border:1px solid var(--bd);border-radius:10px;padding:1.6rem;transition:all .3s;position:relative;overflow:hidden}.ic::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cy),transparent);opacity:0;transition:opacity .3s}.ic:hover{border-color:var(--bl2);transform:translateY(-3px);box-shadow:0 8px 25px rgba(0,0,0,.2)}.ic:hover::before{opacity:1}.ic .icon{font-size:1.4rem;margin-bottom:.6rem}.ic h4{font-family:'Fraunces',serif;font-size:1rem;font-weight:500;margin-bottom:.4rem}.ic p{font-size:.83rem;color:var(--tm);line-height:1.6;max-width:none}
+.ex{border:1px solid var(--bd);border-radius:8px;margin-bottom:.7rem;overflow:hidden}.ex-h{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.2rem;cursor:pointer;background:var(--bg2);transition:background .2s;user-select:none}.ex-h:hover{background:var(--bg3)}.ex-h h4{font-size:.9rem;font-weight:500;display:flex;align-items:center;gap:.7rem}.ex-h .ch{font-size:.75rem;color:var(--tm);transition:transform .25s}.ex.open .ch{transform:rotate(180deg)}.ex-b{max-height:0;overflow:hidden;transition:max-height .4s ease}.ex.open .ex-b{max-height:6000px}.ex-c{padding:1.2rem;border-top:1px solid var(--bd)}.ex-c p{font-size:.86rem;margin-bottom:.7rem}
+.tag{display:inline-block;font-family:'DM Mono',monospace;font-size:.63rem;letter-spacing:.05em;padding:.18rem .5rem;border-radius:4px;border:1px solid;margin-right:.3rem}.tag.cy{border-color:rgba(0,229,200,.3);color:var(--cy);background:rgba(0,229,200,.06)}.tag.am{border-color:rgba(240,168,48,.3);color:var(--am);background:rgba(240,168,48,.06)}.tag.ro{border-color:rgba(240,83,101,.3);color:var(--ro);background:rgba(240,83,101,.06)}.tag.bl{border-color:rgba(74,158,255,.3);color:var(--bl);background:rgba(74,158,255,.06)}
+.co{border-left:3px solid var(--cy);border-radius:0 8px 8px 0;padding:1.2rem 1.4rem;margin:1.5rem 0;background:rgba(0,229,200,.04)}.co.w{background:rgba(240,168,48,.04);border-left-color:var(--am)}.co.d{background:rgba(240,83,101,.04);border-left-color:var(--ro)}.co.i{background:rgba(74,158,255,.04);border-left-color:var(--bl)}.co-t{font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.45rem}.co .co-t{color:var(--cy)}.co.w .co-t{color:var(--am)}.co.d .co-t{color:var(--ro)}.co.i .co-t{color:var(--bl)}.co p{font-size:.86rem;margin-bottom:0}
+.fl{display:flex;align-items:center;gap:.45rem;flex-wrap:wrap;margin:1.4rem 0;padding:1.2rem;background:var(--bg2);border-radius:8px;border:1px solid var(--bd)}.fl-s{background:var(--bg3);border:1px solid var(--bl2);border-radius:6px;padding:.5rem .9rem;font-size:.78rem;font-weight:500;white-space:nowrap}.fl-a{color:var(--cy);font-size:.85rem}
+.ad{background:var(--bg2);border:1px solid var(--bd);border-radius:10px;padding:2rem;margin:2rem 0;overflow-x:auto}.ar{display:flex;align-items:stretch;gap:.8rem;margin-bottom:.8rem;justify-content:center;flex-wrap:wrap}.ab{background:var(--bg3);border:1px solid var(--bl2);border-radius:8px;padding:.8rem 1.1rem;text-align:center;min-width:120px;flex:1;max-width:180px;transition:all .25s}.ab:hover{border-color:var(--cy);transform:translateY(-2px)}.ab.hl{border-color:var(--cy);background:rgba(0,229,200,.04)}.ab .lb{font-family:'DM Mono',monospace;font-size:.62rem;color:var(--cy);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.25rem}.ab .nm{font-size:.83rem;font-weight:500}.ab .ds{font-size:.68rem;color:var(--tm);margin-top:.2rem}.aa{text-align:center;color:var(--tm);font-size:1rem;margin:.3rem 0}.al{text-align:center;font-family:'DM Mono',monospace;font-size:.6rem;color:var(--tm);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.5rem}
+.sep{height:1px;background:linear-gradient(90deg,transparent,var(--bl2),transparent);margin:3.5rem 0}
+.footer{padding:2.5rem 2rem;border-top:1px solid var(--bd);text-align:center}.footer p{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--tm);margin:0 auto}
+@media(max-width:768px){.nav-links{display:none}.hero{padding:6rem 1.5rem 3rem}.section{padding:3rem 1.5rem}.hero-meta{flex-direction:column;gap:.75rem}.ad{padding:1rem}}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}.reveal.visible{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-inner"><div class="nav-logo">⬡ Blockchain × FinServ</div><ul class="nav-links">
+<li><a href="#fundamentals">Fundamentals</a></li><li><a href="#tokenization">Tokenization</a></li><li><a href="#consensus">Consensus</a></li><li><a href="#architecture">Architecture</a></li><li><a href="#verticals">Verticals</a></li><li><a href="#smart-contracts">Contracts</a></li><li><a href="#op-risk">Op Risk</a></li><li><a href="#compliance">Compliance</a></li><li><a href="#integration">Integration</a></li>
+</ul></div></nav>
+
+<section class="hero"><div class="hero-content">
+<div class="hero-tag">Technical Reference · Part 1 of 3</div>
+<h1>Blockchain &amp; DLT in <span>Financial Services</span></h1>
+<p class="hero-sub">A comprehensive deep-dive into distributed ledger technology, tokenization, and their operational impact across banks, credit unions, fintechs, and BaaS platforms. Covering consensus, smart contract governance, operational risk, fraud typologies, regulatory frameworks, and integration patterns.</p>
+<div class="hero-meta"><div><strong>Audience:</strong> Engineering, Risk &amp; Compliance</div><div><strong>Depth:</strong> Technical / Strategic</div><div><strong>Scope:</strong> Banks · CUs · Fintechs · BaaS</div></div>
+</div></section>
+
+<!-- 01 FUNDAMENTALS -->
+<section class="section" id="fundamentals"><div class="section-inner reveal">
+<div class="section-label" data-num="01">Core Fundamentals</div>
+<h2>What Blockchain Actually Is</h2>
+<p>Blockchain / distributed ledger technology (DLT) is a <strong>shared system of record where multiple parties can validate and write transactions under agreed rules</strong>. Each block contains validated transactions, a timestamp, and the cryptographic hash of the preceding block — creating an immutable, append-only chain.</p>
+<p>In finance, the value is less "crypto" and more <strong>shared infrastructure</strong>: near-real-time settlement, atomic delivery-versus-payment, programmability, and reduced reconciliation across firms. Even if an institution doesn't "touch crypto," it may touch clients, processors, custodians, or partners that do — creating <strong>indirect risk</strong>.</p>
+
+<div class="co"><div class="co-t">Key distinction</div><p>Most production financial deployments use <strong>permissioned / consortium</strong> blockchains (Hyperledger Fabric, R3 Corda, Quorum), not public chains. Driven by KYC/AML requirements, data privacy, finality guarantees, and need for known participants.</p></div>
+
+<div class="code-block"><div class="code-header"><span class="code-lang">Block Structure</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+<pre><span class="cmt">// Simplified block structure — financial-grade blockchain</span>
+<span class="kw">Block</span> {
+  index:          <span class="num">uint64</span>
+  timestamp:      <span class="num">ISO-8601</span>
+  prev_hash:      <span class="str">SHA-256(Block[n-1])</span>         <span class="cmt">// chain integrity</span>
+  merkle_root:    <span class="str">SHA-256(tx_tree)</span>            <span class="cmt">// tx integrity</span>
+  state_root:     <span class="str">SHA-256(world_state)</span>        <span class="cmt">// current state</span>
+  validator_sigs: <span class="fn">[]Signature</span>                 <span class="cmt">// peer endorsement</span>
+  transactions:   <span class="fn">[]Transaction</span> {
+    tx_id:    <span class="str">UUID</span>      sender:   <span class="fn">PublicKey</span>
+    recipient:<span class="fn">PublicKey</span>  payload:  <span class="fn">EncryptedData</span>
+    signature:<span class="fn">ECDSA | EdDSA</span>
+  }
+}</pre></div>
+
+<h3>Public vs. Permissioned</h3>
+<div style="overflow-x:auto"><table class="ct"><thead><tr><th>Property</th><th>Public (Ethereum)</th><th>Permissioned (Fabric, Corda)</th><th>Financial Relevance</th></tr></thead><tbody>
+<tr><td>Access</td><td>Open — anyone joins</td><td>Restricted — vetted</td><td>Regulators require known participants</td></tr>
+<tr><td>Identity</td><td>Pseudonymous wallets</td><td>Verified (X.509 certs)</td><td>KYC/AML requires identity layer</td></tr>
+<tr><td>Throughput</td><td>~15-100 TPS (L1)</td><td>1,000-20,000+ TPS</td><td>Payment rails need throughput</td></tr>
+<tr><td>Finality</td><td>Probabilistic (~6 min)</td><td>Deterministic (seconds)</td><td>Settlement needs guaranteed finality</td></tr>
+<tr><td>Privacy</td><td>All txns visible</td><td>Channels, private data</td><td>GLBA, GDPR mandate confidentiality</td></tr>
+<tr><td>Governance</td><td>Community/foundation</td><td>Consortium policies</td><td>Institutions need formal governance</td></tr>
+</tbody></table></div>
+</div></section><div class="sep"></div>
+
+<!-- 02 TOKENIZATION -->
+<section class="section" id="tokenization"><div class="section-inner reveal">
+<div class="section-label" data-num="02">Tokenization</div>
+<h2>From Assets to Tokens: The Spectrum</h2>
+<p><strong>Tokenization</strong> is representing a claim or right — cash, deposits, securities, loans, funds, commodities, receivables — as a digital token on a ledger. This is how blockchain connects to traditional financial instruments and creates new risk dynamics.</p>
+
+<div class="tabs"><div class="tab-buttons">
+<button class="tab-btn active" data-tab="t-wrapped">Wrapped Representations</button>
+<button class="tab-btn" data-tab="t-native">Native On-Chain</button>
+<button class="tab-btn" data-tab="t-what">What's Being Tokenized</button>
+</div>
+<div class="tab-panel active" id="panel-t-wrapped">
+<p>A token <strong>mirrors an off-chain asset</strong>; the legal claim lives in traditional custody/registries. The token is a reference or receipt.</p>
+<p><strong>Examples:</strong> Tokenized T-bills (Ondo, Franklin Templeton), wrapped real estate interests, tokenized fund shares.</p>
+<p><strong>Risk:</strong> You inherit both traditional custody risk AND blockchain operational risk. Reconciliation between on-chain token state and off-chain asset state is a critical control.</p>
+</div>
+<div class="tab-panel" id="panel-t-native">
+<p>Issuance, transfer, servicing, and lifecycle events <strong>occur on-chain</strong>, with legal frameworks making those actions binding. The token IS the asset.</p>
+<p><strong>Examples:</strong> Goldman Sachs GS DAP™, HSBC Orion (bonds), JPM Coin (deposits), USDC/USDT (stablecoins).</p>
+<p><strong>Risk:</strong> Greater efficiency but higher smart contract risk. Lifecycle events (coupons, maturities, corporate actions) are encoded in contract logic — bugs have direct financial impact.</p>
+</div>
+<div class="tab-panel" id="panel-t-what">
+<div class="card-grid tri">
+<div class="ic"><div class="icon">💵</div><h4>Cash &amp; Deposits</h4><p>Stablecoins, tokenized deposits, e-money tokens. Payment rails, settlement assets, collateral.</p></div>
+<div class="ic"><div class="icon">📜</div><h4>Securities</h4><p>Bonds, equities, fund shares. T+0 settlement, automated corporate actions, fractional ownership.</p></div>
+<div class="ic"><div class="icon">🏦</div><h4>Loans &amp; Receivables</h4><p>Loan participation, invoice financing. Automated payment waterfalls.</p></div>
+<div class="ic"><div class="icon">🏠</div><h4>Real Assets</h4><p>Real estate, commodities, infrastructure. Fractional ownership of illiquid markets.</p></div>
+<div class="ic"><div class="icon">🔄</div><h4>Collateral</h4><p>On-chain margining, automated substitution, real-time haircuts.</p></div>
+<div class="ic"><div class="icon">📊</div><h4>Derivatives</h4><p>Smart contract settlement, automated margin calls, oracle-driven payoffs.</p></div>
+</div>
+</div></div>
+
+<div class="co w"><div class="co-t">ERM correlation warning</div><p>Tokenization can <strong>connect payments, liquidity, market, legal, third-party, and cyber risk in a single event</strong>. A depeg triggers liquidity stress + reputational + legal claims + customer runs simultaneously. ERM needs clear risk appetite: which chains, which assets, which counterparties, which geographies, and what "kill switches" exist.</p></div>
+</div></section><div class="sep"></div>
+
+<!-- 03 CONSENSUS -->
+<section class="section" id="consensus"><div class="section-inner reveal">
+<div class="section-label" data-num="03">Consensus Mechanisms</div>
+<h2>How Networks Agree on Truth</h2>
+<p>Consensus determines <strong>latency, throughput, finality, and fault tolerance</strong>. "Final" is protocol-dependent — operational playbooks differ fundamentally from ACH/wires/cards.</p>
+
+<div class="tabs"><div class="tab-buttons">
+<button class="tab-btn active" data-tab="c-pbft">PBFT / IBFT</button>
+<button class="tab-btn" data-tab="c-raft">Raft / CFT</button>
+<button class="tab-btn" data-tab="c-pos">Proof of Stake</button>
+<button class="tab-btn" data-tab="c-notary">Notary (Corda)</button>
+</div>
+<div class="tab-panel active" id="panel-c-pbft">
+<p><span class="tag cy">Hyperledger Fabric</span> <span class="tag bl">Quorum (IBFT)</span></p>
+<p>Tolerates <strong>⌊(n-1)/3⌋</strong> faulty/malicious nodes. Three rounds: pre-prepare, prepare, commit. <strong>Deterministic finality</strong> in 1-3 sec, 1K-3K TPS. O(n²) complexity limits to ~20-100 validators.</p>
+<div class="fl"><div class="fl-s">Client</div><span class="fl-a">→</span><div class="fl-s">Pre-Prepare</div><span class="fl-a">→</span><div class="fl-s">Prepare (2f+1)</div><span class="fl-a">→</span><div class="fl-s">Commit (2f+1)</div><span class="fl-a">→</span><div class="fl-s">✓ Final</div></div>
+<div class="co"><div class="co-t">Settlement finality</div><p>Deterministic finality = settled, aligning with EU Settlement Finality Directive. Directly impacts GL posting rules.</p></div>
+</div>
+<div class="tab-panel" id="panel-c-raft">
+<p><span class="tag cy">Fabric ordering</span> <span class="tag am">Internal consortiums</span></p>
+<p><strong>Crash fault tolerant</strong> — tolerates offline nodes but NOT malicious behavior. Sub-second finality, higher throughput. Use when all participants are trusted.</p>
+</div>
+<div class="tab-panel" id="panel-c-pos">
+<p><span class="tag bl">Ethereum 2.0</span> <span class="tag cy">Solana</span></p>
+<p>Validators stake tokens as collateral. Economic security via <strong>slashing</strong>. Most regulated institutions interact via L2 solutions rather than running validators.</p>
+</div>
+<div class="tab-panel" id="panel-c-notary">
+<p><span class="tag ro">R3 Corda</span></p>
+<p>No global broadcast. Point-to-point transactions, <strong>notary service</strong> prevents double-spends without seeing content. Mirrors how financial markets work — strong privacy by design.</p>
+</div></div>
+</div></section><div class="sep"></div>
+
+<!-- 04 ARCHITECTURE -->
+<section class="section" id="architecture"><div class="section-inner reveal">
+<div class="section-label" data-num="04">Reference Architecture</div>
+<h2>Blockchain in a Financial Stack</h2>
+<p>Blockchain augments — not replaces — core banking. Architecture must handle key management, compliance screening, event-driven sync, and <strong>24/7 operations</strong>.</p>
+
+<div class="ad">
+<div class="al">Application Layer</div>
+<div class="ar"><div class="ab"><div class="lb">Frontend</div><div class="nm">Web / Mobile</div><div class="ds">Customer apps</div></div><div class="ab"><div class="lb">Portal</div><div class="nm">Admin (24/7)</div><div class="ds">Ops & monitoring</div></div><div class="ab"><div class="lb">Partner</div><div class="nm">API Gateway</div><div class="ds">3P integrations</div></div></div>
+<div class="aa">↕</div>
+<div class="al">Service Layer</div>
+<div class="ar"><div class="ab"><div class="lb">Adapter</div><div class="nm">Chain Router</div><div class="ds">SDK, tx routing</div></div><div class="ab"><div class="lb">Compliance</div><div class="nm">AML / Sanctions</div><div class="ds">Pre-tx screening</div></div><div class="ab"><div class="lb">Security</div><div class="nm">HSM / MPC</div><div class="ds">Key management</div></div></div>
+<div class="aa">↕</div>
+<div class="al">Blockchain Layer</div>
+<div class="ar"><div class="ab hl"><div class="lb">Node</div><div class="nm">Peer / Validator</div><div class="ds">Endorses txns</div></div><div class="ab hl"><div class="lb">Consensus</div><div class="nm">Ordering</div><div class="ds">Finality</div></div><div class="ab hl"><div class="lb">Logic</div><div class="nm">Smart Contracts</div><div class="ds">Business rules</div></div></div>
+<div class="aa">↕</div>
+<div class="al">Data Layer</div>
+<div class="ar"><div class="ab"><div class="lb">Ledger</div><div class="nm">On-Chain</div><div class="ds">Immutable log</div></div><div class="ab"><div class="lb">DB</div><div class="nm">Off-Chain</div><div class="ds">PII, analytics</div></div><div class="ab"><div class="lb">Legacy</div><div class="nm">Core Banking</div><div class="ds">System of record</div></div></div>
+</div>
+<div class="co w"><div class="co-t">PII &amp; data privacy</div><p><strong>Never store PII on-chain.</strong> On-chain data permanence conflicts with GDPR/CCPA. Move PII off-chain, use hashes on-chain, implement crypto-shredding where needed.</p></div>
+</div></section><div class="sep"></div>
+
+<!-- 05 VERTICALS -->
+<section class="section" id="verticals"><div class="section-inner reveal">
+<div class="section-label" data-num="05">Financial Verticals</div>
+<h2>Blockchain Across Institution Types</h2>
+
+<div class="tabs"><div class="tab-buttons">
+<button class="tab-btn active" data-tab="v-banks">Banks</button>
+<button class="tab-btn" data-tab="v-cus">Credit Unions</button>
+<button class="tab-btn" data-tab="v-fin">Fintechs</button>
+<button class="tab-btn" data-tab="v-baas">BaaS</button>
+</div>
+<div class="tab-panel active" id="panel-v-banks">
+<div class="card-grid">
+<div class="ic"><div class="icon">🏦</div><h4>Cross-Border Payments</h4><p>Replace SWIFT + nostro/vostro with atomic settlement. T+2 → real-time. Kinexys: $2B+/day. 24/7 creates new ALM considerations.</p></div>
+<div class="ic"><div class="icon">📄</div><h4>Trade Finance</h4><p>Digitize LCs, bills of lading. 5-10 days → &lt;24 hours. Shared source of truth cuts reconciliation.</p></div>
+<div class="ic"><div class="icon">🪙</div><h4>Tokenized Assets</h4><p>Bonds, securities, deposits on-chain. GS DAP™, HSBC Orion. Bank-issued tokens may qualify for deposit insurance.</p></div>
+<div class="ic"><div class="icon">🔐</div><h4>KYC / Identity</h4><p>Consortium KYC utilities. Attestation hashes on-chain, data sovereignty preserved.</p></div>
+</div>
+<div class="co"><div class="co-t">Bank risk impact</div><p>Requires HSM key management, IAM/LDAP integration, OCC/FFIEC audit trails, <strong>pre-notification to primary regulator</strong>, Basel crypto-asset capital treatment, ALM stress testing for 24/7 outflows. Board must answer: is this payments, custody, securities settlement, or deposit substitution? What's the exit strategy?</p></div>
+</div>
+<div class="tab-panel" id="panel-v-cus">
+<div class="card-grid">
+<div class="ic"><div class="icon">🤝</div><h4>CUSO Shared Networks</h4><p>Loan participation, shared branching settlement, inter-CU transfers via CUSO-managed blockchain.</p></div>
+<div class="ic"><div class="icon">📊</div><h4>Lending Participation</h4><p>Transparent loan pools. Smart contracts automate payment waterfalls.</p></div>
+<div class="ic"><div class="icon">✅</div><h4>Regulatory Reporting</h4><p>Automate NCUA call report data with on-chain records pre-audited by consensus.</p></div>
+</div>
+<div class="co w"><div class="co-t">CU reality</div><p>CUSO-led adoption. CUs still own the risk — TPRM must cover CUSO's stack. NCUA requires notification. Include a <strong>"complexity budget"</strong> — don't exceed what compliance can manage.</p></div>
+</div>
+<div class="tab-panel" id="panel-v-fin">
+<div class="card-grid">
+<div class="ic"><div class="icon">⚡</div><h4>DeFi Infrastructure</h4><p>Lending protocols, AMMs, yield aggregators. Highest smart contract risk exposure.</p></div>
+<div class="ic"><div class="icon">💸</div><h4>Stablecoin Rails</h4><p>USDC/USDT for instant settlement. Stripe acquired Bridge for stablecoin orchestration.</p></div>
+<div class="ic"><div class="icon">🌐</div><h4>Tokenized RWA</h4><p>Fractionalize real estate, PE, receivables. Programmable compliance (ERC-3643).</p></div>
+<div class="ic"><div class="icon">🔗</div><h4>Cross-Chain</h4><p>Bridges and aggregators across L1s/L2s. Bridge security is a critical risk vector.</p></div>
+</div>
+</div>
+<div class="tab-panel" id="panel-v-baas">
+<div class="card-grid">
+<div class="ic"><div class="icon">🧩</div><h4>Ledger-as-a-Service</h4><p>Blockchain-backed ledgers for fintech clients. Immutable records, real-time settlement.</p></div>
+<div class="ic"><div class="icon">🏗️</div><h4>Multi-Tenant Settlement</h4><p>Replace nightly batch with real-time atomic settlement. Reduces counterparty risk.</p></div>
+<div class="ic"><div class="icon">📋</div><h4>Compliance Automation</h4><p>Embed rules in smart contracts. Sponsor bank gets real-time tenant visibility.</p></div>
+<div class="ic"><div class="icon">🔑</div><h4>Programmable Controls</h4><p>Contract-governed permissions. Escrow, conditional payments, sub-ledger mgmt.</p></div>
+</div>
+<div class="co"><div class="co-t">BaaS compound risk</div><p>Bank + fintech + stablecoin issuer + chain = compound risk. Contracts must allocate: KYC/KYB, sanctions screening, monitoring, error resolution, disclosures, complaint handling, incident mgmt. Watch for <strong>regulatory arbitrage</strong> and yield programs that resemble deposit substitution.</p></div>
+</div></div>
+</div></section><div class="sep"></div>
+
+<!-- 06 SMART CONTRACTS -->
+<section class="section" id="smart-contracts"><div class="section-inner reveal">
+<div class="section-label" data-num="06">Smart Contracts</div>
+<h2>"Code Is a Regulated Process"</h2>
+<p>Smart contracts encode <strong>business rules, compliance checks, and settlement logic</strong>. Regulators treat contract code as a regulated process — requiring formal governance, independent review, and change management.</p>
+
+<div class="code-block"><div class="code-header"><span class="code-lang">Solidity — Tokenized Deposit</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+<pre><span class="kw">contract</span> <span class="fn">TokenizedDeposit</span> <span class="kw">is</span> ERC20, Ownable {
+    <span class="kw">mapping</span>(<span class="kw">address</span> => <span class="kw">bool</span>) <span class="kw">public</span> whitelisted;
+    IComplianceOracle <span class="kw">public</span> complianceOracle;
+    
+    <span class="kw">modifier</span> <span class="fn">onlyCompliant</span>(<span class="kw">address</span> from, <span class="kw">address</span> to) {
+        <span class="kw">require</span>(whitelisted[from] && whitelisted[to], <span class="str">"KYC required"</span>);
+        <span class="kw">require</span>(!complianceOracle.<span class="fn">isSanctioned</span>(from) && 
+                !complianceOracle.<span class="fn">isSanctioned</span>(to),
+                <span class="str">"OFAC check failed"</span>);
+        _;
+    }
+    
+    <span class="kw">function</span> <span class="fn">transfer</span>(<span class="kw">address</span> to, <span class="num">uint256</span> amt) 
+        <span class="kw">public override</span> <span class="fn">onlyCompliant</span>(msg.sender, to) 
+        <span class="kw">returns</span> (<span class="kw">bool</span>) {
+        <span class="kw">require</span>(dailyVol[msg.sender] + amt <= <span class="num">250_000e18</span>);
+        dailyVol[msg.sender] += amt;
+        <span class="kw">return super</span>.<span class="fn">transfer</span>(to, amt);
+    }
+}</pre></div>
+
+<h3>Mandatory Governance Controls</h3>
+<div class="ex open"><div class="ex-h" onclick="toggleEx(this)"><h4><span class="tag cy">Control</span> Segregation of Duties</h4><span class="ch">▼</span></div><div class="ex-b"><div class="ex-c">
+<p>Separate roles: <strong>mint/burn</strong>, <strong>reserve movement</strong>, <strong>contract upgrades</strong>, <strong>allowlist/denylist</strong>, <strong>pause authority</strong>. No single individual controls mint AND reserves. Multi-sig (2-of-3 / 3-of-5) on all admin functions.</p>
+</div></div></div>
+<div class="ex"><div class="ex-h" onclick="toggleEx(this)"><h4><span class="tag am">Control</span> Change Mgmt &amp; Audit</h4><span class="ch">▼</span></div><div class="ex-b"><div class="ex-c">
+<p>Formal change management + independent review. Min 2 audits from tier-1 firms (Trail of Bits, OpenZeppelin, Consensys Diligence). Formal verification for material-value contracts. Timelocked governance (24-72hr) on changes.</p>
+</div></div></div>
+<div class="ex"><div class="ex-h" onclick="toggleEx(this)"><h4><span class="tag ro">Control</span> Operational Runbooks</h4><span class="ch">▼</span></div><div class="ex-b"><div class="ex-c">
+<p>Documented runbooks: chain halts, bridge compromise, depegs, abnormal gas, validator events, oracle failures. Tested quarterly. Must cover 24/7 response.</p>
+</div></div></div>
+
+<h3>Financial Patterns</h3>
+<div class="card-grid">
+<div class="ic"><div class="icon">🔒</div><h4>Escrow &amp; Conditional Release</h4><p>Funds locked until conditions met. Re-entrancy guards, pull-over-push patterns.</p></div>
+<div class="ic"><div class="icon">💧</div><h4>Payment Waterfalls</h4><p>Auto-distribute: senior → mezzanine → equity. Basis point precision for rounding.</p></div>
+<div class="ic"><div class="icon">✅</div><h4>Compliance (ERC-3643)</h4><p>On-chain identity registry, country restrictions, accreditation. Upgradeable proxy.</p></div>
+<div class="ic"><div class="icon">📡</div><h4>Oracle-Driven Settlement</h4><p>External data triggers. Decentralized oracles, circuit breakers, staleness checks.</p></div>
+</div>
+</div></section><div class="sep"></div>
+
+<!-- 07 OPERATIONAL RISK -->
+<section class="section" id="op-risk"><div class="section-inner reveal">
+<div class="section-label" data-num="07">Operational Risk</div>
+<h2>New Failure Modes</h2>
+<p>Blockchain introduces operational risks that <strong>don't exist in traditional banking</strong>. Transactions are irreversible, operations run 24/7, key loss = permanent asset loss.</p>
+
+<div class="ex open"><div class="ex-h" onclick="toggleEx(this)"><h4><span class="tag ro">Risk</span> Private Key / Wallet Controls</h4><span class="ch">▼</span></div><div class="ex-b"><div class="ex-c">
+<p><strong>Failure modes:</strong> Loss, theft, privileged access misuse. Compromised key = irrevocable control. No "forgot my key."</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">Key Management</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+<pre><span class="kw">STORAGE</span>
+  ├─ Production: <span class="fn">FIPS 140-2 Level 3+ HSM</span>
+  ├─ Backup: <span class="fn">Shamir Secret Sharing (3-of-5)</span>
+  └─ Hot wallet: <span class="fn">MPC</span> (Fireblocks, Fordefi)
+<span class="kw">ACCESS</span>
+  ├─ Multi-sig: <span class="fn">2-of-3 / 3-of-5</span> high-value
+  ├─ Time-locks: <span class="fn">24hr delay</span> > threshold
+  └─ Biometric + hardware token
+<span class="kw">CEREMONIES</span>
+  ├─ Generation: witnessed, dual-control
+  ├─ Rotation: quarterly operational keys
+  └─ DR: tested semi-annually</pre></div>
+</div></div></div>
+
+<div class="ex"><div class="ex-h" onclick="toggleEx(this)"><h4><span class="tag ro">Risk</span> Irreversibility &amp; Finality</h4><span class="ch">▼</span></div><div class="ex-b"><div class="ex-c">
+<p><strong>No chargebacks, recalls, or reversals.</strong> Pre-transaction controls are critical. Finality is protocol-dependent. L2 rollups: soft confirm in seconds, L1 finality may take days (optimistic). Define policies per chain.</p>
+</div></div></div>
+
+<div class="ex"><div class="ex-h" onclick="toggleEx(this)"><h4><span class="tag ro">Risk</span> 24/7 Operations</h4><span class="ch">▼</span></div><div class="ex-b"><div class="ex-c">
+<p>Staffing, incident response, liquidity ops, reconciliations, support — no longer "banker's hours." 24/7 on-call, automated monitoring, circuit breakers, weekend/holiday staffing for compliance and treasury.</p>
+</div></div></div>
+
+<div class="ex"><div class="ex-h" onclick="toggleEx(this)"><h4><span class="tag ro">Risk</span> Blockchain-Native Fraud</h4><span class="ch">▼</span></div><div class="ex-b"><div class="ex-c">
+<p>• <strong>Address poisoning</strong> — Tiny txns from lookalike addresses to trick copy-paste</p>
+<p>• <strong>Spoofing</strong> — Malicious contract interactions disguised as legitimate</p>
+<p>• <strong>Pig-butchering</strong> — Social engineering to attacker-controlled wallets</p>
+<p>• <strong>Sanction evasion</strong> — Mixers, rapid hop chains, cross-DEX layering</p>
+<p>• <strong>Smart contract exploits</strong> — Re-entrancy, oracle manipulation, flash loans, governance takeovers</p>
+<p><strong>Controls:</strong> Address verification UX, tx simulation, blockchain analytics (Chainalysis/TRM), consumer education.</p>
+</div></div></div>
+
+<div class="ex"><div class="ex-h" onclick="toggleEx(this)"><h4><span class="tag ro">Risk</span> Third-Party (TPRM) Expansion</h4><span class="ch">▼</span></div><div class="ex-b"><div class="ex-c">
+<p>New vendors: custodians, MPC providers, node infra, chain analytics, contract auditors, oracle providers, stablecoin issuers, exchanges, bridges, KYC providers.</p>
+<p>Requirements: evidence of key custody controls, incident SLAs, audit reports, code audit scope, upgrade governance. Watch <strong>concentration risk</strong> — many "independent" vendors share same cloud/HSM stack. Right-to-audit and breach notification tailored to on-chain incidents.</p>
+</div></div></div>
+</div></section><div class="sep"></div>
+
+<!-- 08 COMPLIANCE -->
+<section class="section" id="compliance"><div class="section-inner reveal">
+<div class="section-label" data-num="08">Regulatory &amp; Compliance</div>
+<h2>Navigating the Landscape</h2>
+
+<div class="card-grid">
+<div class="ic"><div class="icon">🇺🇸</div><h4>U.S. Framework</h4><p><strong>OCC</strong> Letter 1174: DLT for payments/stablecoins. <strong>GENIUS Act:</strong> Payment stablecoin issuers, reserves, supervision. <strong>SEC:</strong> Howey test. <strong>FinCEN:</strong> BSA applies. Pre-notification required.</p></div>
+<div class="ic"><div class="icon">🇪🇺</div><h4>EU / MiCA</h4><p>EMTs (e-money tokens) and ARTs (asset-referenced tokens) with authorization, reserve, redemption requirements. Full enforcement June 2024. <strong>DORA:</strong> ICT risk management.</p></div>
+<div class="ic"><div class="icon">🌐</div><h4>Basel &amp; FSB</h4><p>Group 1a/1b vs Group 2 (1250% risk weight). Disclosure framework Jan 2026. FSB global baseline for crypto oversight.</p></div>
+<div class="ic"><div class="icon">🔒</div><h4>Data &amp; Audit</h4><p>GDPR vs. immutability: off-chain PII, on-chain hashes, crypto-shredding. FFIEC expects risk assessments, vendor DD, DR/key recovery.</p></div>
+</div>
+
+<div class="co d"><div class="co-t">Key management is a regulatory requirement</div><p>FIPS 140-2 Level 3+ HSMs, MPC/threshold signatures, documented key recovery, separation of duties, tested DR. Non-negotiable.</p></div>
+
+<h3>Core Legal Questions</h3>
+<p><strong>What is the token legally?</strong> E-money token, asset-referenced token, deposit, security, stored value, prepaid access — varies by jurisdiction. MiCA classifies EMTs/ARTs explicitly. The U.S. has a stablecoin-specific framework post-GENIUS. Getting this wrong has cascading implications for capital treatment, licensing, consumer protection, and tax.</p>
+<p><strong>Redemption &amp; consumer protection:</strong> Enforceable 1:1 redemption rights, timing, fees, segregation of reserves, insolvency treatment. <strong>Financial crime:</strong> AML/sanctions on a transparent but pseudonymous network requires new monitoring, typologies, and escalation. <strong>Cross-border:</strong> Stablecoin activity is global-by-default; regulators follow FSB's push for consistent oversight.</p>
+</div></section><div class="sep"></div>
+
+<!-- 09 INTEGRATION -->
+<section class="section" id="integration"><div class="section-inner reveal">
+<div class="section-label" data-num="09">Integration &amp; Risk Assessment</div>
+<h2>Connecting to Existing Systems</h2>
+
+<div class="ex open"><div class="ex-h" onclick="toggleEx(this)"><h4><span class="tag cy">01</span> Event-Driven Sync</h4><span class="ch">▼</span></div><div class="ex-b"><div class="ex-c">
+<p>On-chain events → Kafka → Core banking consumers → GL. Idempotent consumers, block height tracking, automated reconciliation every block or 15 min, instant alerts on discrepancy.</p>
+<div class="fl"><div class="fl-s">On-Chain</div><span class="fl-a">→</span><div class="fl-s">Listener</div><span class="fl-a">→</span><div class="fl-s">Kafka</div><span class="fl-a">→</span><div class="fl-s">Core Banking</div><span class="fl-a">→</span><div class="fl-s">GL</div></div>
+</div></div></div>
+
+<div class="ex"><div class="ex-h" onclick="toggleEx(this)"><h4><span class="tag am">02</span> API Abstraction</h4><span class="ch">▼</span></div><div class="ex-b"><div class="ex-c">
+<p>REST/gRPC abstracts chain complexity. Under the hood: validate → KYC/sanctions → build tx → HSM sign → submit → confirm.</p>
+</div></div></div>
+
+<div class="ex"><div class="ex-h" onclick="toggleEx(this)"><h4><span class="tag ro">03</span> Off-Chain / On-Chain Hybrid</h4><span class="ch">▼</span></div><div class="ex-b"><div class="ex-c">
+<p>PII and heavy compute off-chain; hashes, proofs, finality on-chain. Merkle roots committed periodically.</p>
+</div></div></div>
+
+<div class="ex"><div class="ex-h" onclick="toggleEx(this)"><h4><span class="tag bl">04</span> Activity-Based Risk Assessment</h4><span class="ch">▼</span></div><div class="ex-b"><div class="ex-c">
+<p>For each product, classify your institution's role and apply role-specific controls:</p>
+<div style="overflow-x:auto"><table class="ct"><thead><tr><th>Role</th><th>Activity</th><th>Key Controls</th></tr></thead><tbody>
+<tr><td>Issuer</td><td>Stablecoin / tokenized deposit</td><td>Reserve mgmt, attestation, redemption, ALM stress</td></tr>
+<tr><td>Custodian</td><td>Wallet provider</td><td>Key management, segregation, insurance, DR</td></tr>
+<tr><td>On/Off-Ramp</td><td>Fiat ↔ stablecoin</td><td>AML/KYC, sanctions, MTL licensing</td></tr>
+<tr><td>Payment</td><td>Merchant acquiring</td><td>Consumer disclosures, error resolution, finality</td></tr>
+<tr><td>Broker/ATS</td><td>Tokenized securities</td><td>Securities reg, best execution, surveillance</td></tr>
+<tr><td>Lender</td><td>Tokenized collateral</td><td>Liquidation mechanics, oracle, market depth</td></tr>
+</tbody></table></div>
+<p>For each: chain/asset allowlist, reserve/issuer DD, contract audit + governance, 24/7 playbooks, AML mapped to on-chain typologies, financial reporting controls.</p>
+</div></div></div>
+
+<div class="co"><div class="co-t">Decision framework</div><p><strong>(1)</strong> Shared across org boundaries? <strong>(2)</strong> Immutability required? <strong>(3)</strong> Reconciliation between parties? If 2+ yes → blockchain adds value. Even without direct use, manage risk from clients/partners that use it.</p></div>
+</div></section>
+
+<footer class="footer"><p>Blockchain &amp; DLT in Financial Services — Part 1 of 3</p><p style="margin-top:.4rem">For engineering, risk &amp; compliance teams</p></footer>
+
+<script>
+document.querySelectorAll('.tab-btn').forEach(b=>{b.addEventListener('click',function(){const g=this.closest('.tabs');g.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));g.querySelectorAll('.tab-panel').forEach(x=>x.classList.remove('active'));this.classList.add('active');const p=g.querySelector('#panel-'+this.dataset.tab);if(p)p.classList.add('active')})});
+function toggleEx(h){h.closest('.ex').classList.toggle('open')}
+function copyCode(b){const p=b.closest('.code-block').querySelector('pre');navigator.clipboard.writeText(p.innerText).then(()=>{b.textContent='Copied!';setTimeout(()=>b.textContent='Copy',1500)})}
+const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible')})},{threshold:.1});document.querySelectorAll('.reveal').forEach(e=>obs.observe(e));
+const secs=document.querySelectorAll('.section[id]'),navs=document.querySelectorAll('.nav-links a');window.addEventListener('scroll',()=>{let c='';secs.forEach(s=>{if(pageYOffset>=s.offsetTop-100)c=s.id});navs.forEach(l=>{l.classList.remove('active');if(l.getAttribute('href')==='#'+c)l.classList.add('active')})});
+</script>
+</body>
+</html>

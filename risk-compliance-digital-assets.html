@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Risk & Compliance for Digital Assets — Deep Dive</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,400&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#090b12;--bg2:#11141e;--bg3:#191e2b;--bgc:#151a26;--or:#f97316;--tl:#2dd4bf;--id:#818cf8;--pk:#f472b6;--rd:#ef4444;--gn:#22c55e;--am:#f59e0b;--t1:#eaecf2;--t2:#8590a8;--tm:#505b72;--bd:#232a3e;--bl2:#2e3650}
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}body{background:var(--bg);color:var(--t1);font-family:'IBM Plex Sans',sans-serif;font-weight:400;line-height:1.7;overflow-x:hidden}::selection{background:rgba(249,115,22,.25)}::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--bl2);border-radius:3px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(9,11,18,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--bd);padding:0 2rem}.nav-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px}.nav-logo{font-family:'DM Mono',monospace;font-size:.8rem;letter-spacing:.15em;text-transform:uppercase;color:var(--or)}.nav-logo em{color:var(--tl);font-style:normal}.nav-links{display:flex;gap:.2rem;list-style:none;flex-wrap:wrap}.nav-links a{color:var(--t2);text-decoration:none;font-size:.74rem;font-weight:500;padding:.35rem .6rem;border-radius:4px;transition:all .2s}.nav-links a:hover,.nav-links a.active{color:var(--t1);background:var(--bg3)}
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:8rem 2rem 4rem;position:relative;background:radial-gradient(ellipse at 10% 40%,rgba(249,115,22,.05) 0%,transparent 55%),radial-gradient(ellipse at 80% 20%,rgba(129,140,248,.05) 0%,transparent 50%)}.hero::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 79px,rgba(35,42,62,.18) 79px,rgba(35,42,62,.18) 80px),repeating-linear-gradient(90deg,transparent,transparent 79px,rgba(35,42,62,.18) 79px,rgba(35,42,62,.18) 80px);pointer-events:none}.hero-content{max-width:1000px;margin:0 auto;position:relative;z-index:1}.hero-tag{font-family:'DM Mono',monospace;font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;color:var(--or);margin-bottom:2rem;display:flex;align-items:center;gap:.75rem}.hero-tag::before{content:'';width:32px;height:1px;background:var(--or)}.hero h1{font-family:'Fraunces',serif;font-size:clamp(2.4rem,5vw,4.2rem);font-weight:700;line-height:1.1;margin-bottom:1.5rem}.hero h1 .a{background:linear-gradient(135deg,var(--or),var(--pk));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.hero h1 .b{background:linear-gradient(135deg,var(--tl),var(--id));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.hero-sub{font-size:1.12rem;color:var(--t2);max-width:720px;line-height:1.8;font-weight:300}.hero-meta{margin-top:3rem;display:flex;gap:2rem;font-family:'DM Mono',monospace;font-size:.72rem;color:var(--tm);flex-wrap:wrap}.hero-meta strong{color:var(--t2);font-weight:500}
+.section{padding:5.5rem 2rem}.section-inner{max-width:1100px;margin:0 auto}.section-label{font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--or);margin-bottom:1rem;display:flex;align-items:center;gap:.75rem}.section-label::before{content:attr(data-num);display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border:1px solid var(--or);border-radius:4px;font-size:.65rem}.section h2{font-family:'Fraunces',serif;font-size:clamp(1.7rem,3.5vw,2.5rem);font-weight:500;margin-bottom:1.5rem;line-height:1.2}.section h3{font-family:'Fraunces',serif;font-size:1.12rem;margin:2rem 0 1rem;font-weight:500}.section p{color:var(--t2);font-size:.97rem;max-width:780px;line-height:1.8;margin-bottom:1.2rem;font-weight:300}.section p strong{color:var(--t1);font-weight:500}
+.tabs{margin-top:2rem}.tab-buttons{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.5rem;border-bottom:1px solid var(--bd);padding-bottom:1rem}.tab-btn{background:none;border:1px solid var(--bd);color:var(--t2);font-family:'IBM Plex Sans',sans-serif;font-size:.82rem;font-weight:500;padding:.5rem 1.1rem;border-radius:6px;cursor:pointer;transition:all .25s}.tab-btn:hover{border-color:var(--tm);color:var(--t1)}.tab-btn.active{background:var(--or);color:var(--bg);border-color:var(--or);font-weight:600}.tab-panel{display:none;animation:fu .3s ease}.tab-panel.active{display:block}@keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+pre{padding:1.2rem;overflow-x:auto;font-family:'DM Mono',monospace;font-size:.78rem;line-height:1.7;color:var(--t2)}.code-block{background:var(--bg2);border:1px solid var(--bd);border-radius:8px;overflow:hidden;margin:1.5rem 0}.code-header{display:flex;align-items:center;justify-content:space-between;padding:.6rem 1rem;background:var(--bg3);border-bottom:1px solid var(--bd)}.code-lang{font-family:'DM Mono',monospace;font-size:.68rem;color:var(--am);letter-spacing:.1em;text-transform:uppercase}.code-copy{background:none;border:1px solid var(--bd);color:var(--tm);font-family:'DM Mono',monospace;font-size:.65rem;padding:.25rem .6rem;border-radius:4px;cursor:pointer;transition:all .2s}.code-copy:hover{color:var(--t1)}.kw{color:var(--or)}.str{color:var(--am)}.cmt{color:var(--tm);font-style:italic}.fn{color:var(--tl)}.num{color:var(--pk)}
+table.ct{width:100%;border-collapse:collapse;margin:2rem 0;font-size:.83rem}table.ct th{font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--or);text-align:left;padding:.7rem .9rem;border-bottom:2px solid var(--bl2);background:var(--bg2)}table.ct td{padding:.7rem .9rem;border-bottom:1px solid var(--bd);color:var(--t2);vertical-align:top}table.ct tr:hover td{background:rgba(249,115,22,.02)}table.ct td:first-child{font-weight:500;color:var(--t1)}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.2rem;margin:2rem 0}.ic{background:var(--bgc);border:1px solid var(--bd);border-radius:10px;padding:1.6rem;transition:all .3s;overflow:hidden;position:relative}.ic::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--or),transparent);opacity:0;transition:opacity .3s}.ic:hover{border-color:var(--bl2);transform:translateY(-3px);box-shadow:0 8px 25px rgba(0,0,0,.25)}.ic:hover::before{opacity:1}.ic .icon{font-size:1.4rem;margin-bottom:.6rem}.ic h4{font-family:'Fraunces',serif;font-size:1rem;font-weight:500;margin-bottom:.4rem}.ic p{font-size:.83rem;color:var(--tm);line-height:1.6;max-width:none}
+.ex{border:1px solid var(--bd);border-radius:8px;margin-bottom:.7rem;overflow:hidden}.ex-h{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.2rem;cursor:pointer;background:var(--bg2);transition:background .2s;user-select:none}.ex-h:hover{background:var(--bg3)}.ex-h h4{font-size:.9rem;font-weight:500;display:flex;align-items:center;gap:.7rem}.ex-h .ch{font-size:.75rem;color:var(--tm);transition:transform .25s}.ex.open .ch{transform:rotate(180deg)}.ex-b{max-height:0;overflow:hidden;transition:max-height .4s ease}.ex.open .ex-b{max-height:6000px}.ex-c{padding:1.2rem;border-top:1px solid var(--bd)}.ex-c p{font-size:.86rem;margin-bottom:.7rem}
+.tag{display:inline-block;font-family:'DM Mono',monospace;font-size:.63rem;padding:.18rem .5rem;border-radius:4px;border:1px solid;margin-right:.3rem}.tag.or{border-color:rgba(249,115,22,.3);color:var(--or);background:rgba(249,115,22,.06)}.tag.tl{border-color:rgba(45,212,191,.3);color:var(--tl);background:rgba(45,212,191,.06)}.tag.rd{border-color:rgba(239,68,68,.3);color:var(--rd);background:rgba(239,68,68,.06)}.tag.id{border-color:rgba(129,140,248,.3);color:var(--id);background:rgba(129,140,248,.06)}.tag.pk{border-color:rgba(244,114,182,.3);color:var(--pk);background:rgba(244,114,182,.06)}
+.co{border-left:3px solid var(--or);border-radius:0 8px 8px 0;padding:1.2rem 1.4rem;margin:1.5rem 0;background:rgba(249,115,22,.04)}.co.w{border-left-color:var(--am);background:rgba(245,158,11,.04)}.co.d{border-left-color:var(--rd);background:rgba(239,68,68,.04)}.co.i{border-left-color:var(--tl);background:rgba(45,212,191,.04)}.co.c{border-left-color:var(--id);background:rgba(129,140,248,.04)}.co-t{font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.45rem;color:var(--or)}.co.w .co-t{color:var(--am)}.co.d .co-t{color:var(--rd)}.co.i .co-t{color:var(--tl)}.co.c .co-t{color:var(--id)}.co p{font-size:.86rem;margin-bottom:0}
+.fl{display:flex;align-items:center;gap:.45rem;flex-wrap:wrap;margin:1.4rem 0;padding:1.2rem;background:var(--bg2);border-radius:8px;border:1px solid var(--bd)}.fl-s{background:var(--bg3);border:1px solid var(--bl2);border-radius:6px;padding:.5rem .9rem;font-size:.78rem;font-weight:500;white-space:nowrap}.fl-s.alert{border-color:var(--rd);color:var(--rd);background:rgba(239,68,68,.08)}.fl-s.ok{border-color:var(--gn);color:var(--gn);background:rgba(34,197,94,.08)}.fl-a{color:var(--or);font-size:.85rem}
+.rm{display:grid;grid-template-columns:auto 1fr 1fr 1fr;gap:1px;background:var(--bd);border-radius:8px;overflow:hidden;margin:2rem 0;font-size:.8rem}.rm .c{padding:.65rem .85rem;background:var(--bg2)}.rm .c.hd{background:var(--bg3);font-family:'DM Mono',monospace;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--or);font-weight:500}.rm .c.rl{font-weight:500;color:var(--t1);background:var(--bg3)}.rm .c.hi{background:rgba(239,68,68,.08);color:var(--rd);font-weight:500}.rm .c.md{background:rgba(245,158,11,.08);color:var(--am);font-weight:500}.rm .c.lo{background:rgba(34,197,94,.08);color:var(--gn);font-weight:500}
+.sep{height:1px;background:linear-gradient(90deg,transparent,var(--bl2),transparent);margin:3.5rem 0}
+.footer{padding:2.5rem 2rem;border-top:1px solid var(--bd);text-align:center}.footer p{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--tm);margin:0 auto}
+@media(max-width:768px){.nav-links{display:none}.hero{padding:6rem 1.5rem 3rem}.section{padding:3rem 1.5rem}.hero-meta{flex-direction:column;gap:.75rem}.rm{font-size:.7rem}.rm .c{padding:.4rem .5rem}}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}.reveal.visible{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-inner"><div class="nav-logo">⬣ Risk × <em>Digital Assets</em></div><ul class="nav-links">
+<li><a href="#landscape">Landscape</a></li><li><a href="#risk-map">Risk Map</a></li><li><a href="#institutions">Institutions</a></li><li><a href="#aml">AML</a></li><li><a href="#exam">Exam</a></li><li><a href="#frameworks">Frameworks</a></li><li><a href="#tooling">Tooling</a></li><li><a href="#playbook">Playbook</a></li>
+</ul></div></nav>
+
+<section class="hero"><div class="hero-content">
+<div class="hero-tag">Technical Reference · Part 3 of 3</div>
+<h1><span class="a">Risk &amp; Compliance</span> for <span class="b">Digital Assets</span></h1>
+<p class="hero-sub">How blockchain and stablecoins reshape risk management and compliance across all 10 risk functions. Covering the complete risk-function map, AML/sanctions architecture, examination readiness, regulatory frameworks, and phased implementation playbooks.</p>
+<div class="hero-meta"><div><strong>Audience:</strong> Risk, Compliance &amp; Engineering</div><div><strong>Depth:</strong> Technical / Strategic</div><div><strong>Scope:</strong> Banks · CUs · Fintechs · BaaS</div></div>
+</div></section>
+
+<!-- 01 LANDSCAPE -->
+<section class="section" id="landscape"><div class="section-inner reveal">
+<div class="section-label" data-num="01">The Landscape</div>
+<h2>Why Risk &amp; Compliance Must Evolve</h2>
+<p>Blockchain and stablecoins introduce risk categories that <strong>don't exist in traditional banking</strong>. Even if an institution doesn't "touch crypto," it may touch clients, processors, custodians, or partners that do — creating indirect risk.</p>
+
+<div class="co d"><div class="co-t">The regulatory signal</div><p>Every major U.S. banking regulator — OCC, FDIC, Fed, NCUA, FinCEN, SEC, CFTC — has issued guidance since 2022. Institutions treating this as a "technology project" without embedding risk/compliance from day one will face examination findings or worse.</p></div>
+
+<div style="overflow-x:auto"><table class="ct"><thead><tr><th>Dimension</th><th>Traditional Finance</th><th>Blockchain / Stablecoin</th><th>Risk Implication</th></tr></thead><tbody>
+<tr><td>Reversibility</td><td>Chargebacks, recalls</td><td>Immutable</td><td>Pre-tx controls become critical</td></tr>
+<tr><td>Identity</td><td>Known (KYC'd)</td><td>Pseudonymous wallets</td><td>Wallet attribution required</td></tr>
+<tr><td>Hours</td><td>Business hours, batch</td><td>24/7/365</td><td>Continuous monitoring &amp; response</td></tr>
+<tr><td>Finality</td><td>T+1/T+2, provisional</td><td>Seconds, deterministic</td><td>No time buffer for errors</td></tr>
+<tr><td>Access</td><td>Centralized IAM</td><td>Cryptographic keys</td><td>Key loss = asset loss</td></tr>
+<tr><td>Custody</td><td>Omnibus at custodian</td><td>Self-custody or qualified</td><td>New custody risk + insurance</td></tr>
+<tr><td>Regulation</td><td>Well-defined perimeter</td><td>Evolving, multi-agency</td><td>Uncertainty is itself a risk</td></tr>
+<tr><td>Audit trail</td><td>Internal logs</td><td>Public ledger + internal</td><td>Dual-source reconciliation</td></tr>
+</tbody></table></div>
+</div></section><div class="sep"></div>
+
+<!-- 02 RISK MAP -->
+<section class="section" id="risk-map"><div class="section-inner reveal">
+<div class="section-label" data-num="02">The 10-Domain Risk Map</div>
+<h2>How Every Risk Function Changes</h2>
+<p>A practical risk-function map for institutions that may: issue a stablecoin/tokenized deposit, custody/settle tokenized assets, accept stablecoins, or enable partners to do any of the above.</p>
+
+<div class="ex open"><div class="ex-h" onclick="toggleEx(this)"><h4><span class="tag rd">01</span> Operational Risk</h4><span class="ch">▼</span></div><div class="ex-b"><div class="ex-c">
+<p><strong>New failure modes:</strong> Private key loss/theft/misuse, smart contract bugs, oracle failures, chain reorgs, fee spikes, 24/7 operations.</p>
+<p><strong>Fraud typologies:</strong> Address poisoning, spoofing, pig-butchering, sanction evasion via mixers, rapid hop chains.</p>
+<p><strong>Mandatory controls:</strong> Segregation of duties (mint/burn, reserves, upgrades, allowlists). Formal change management for contracts ("code is a regulated process"). Runbooks for chain halts, bridge compromise, depegs, gas spikes.</p>
+</div></div></div>
+
+<div class="ex"><div class="ex-h" onclick="toggleEx(this)"><h4><span class="tag or">02</span> Enterprise Risk Management (ERM)</h4><span class="ch">▼</span></div><div class="ex-b"><div class="ex-c">
+<p><strong>Correlation risk:</strong> Tokenization connects payments, liquidity, market, legal, 3P, and cyber in one event (depeg → liquidity stress + reputational + legal + customer runs).</p>
+<p><strong>Risk appetite must specify:</strong> Which chains, which assets, which counterparties, which geographies, what "kill switches."</p>
+<p><strong>Board questions:</strong> What business is this (payments, custody, settlement, deposit substitution)? What's the exit strategy (wind-down, redemption, migration, record retention)?</p>
+</div></div></div>
+
+<div class="ex"><div class="ex-h" onclick="toggleEx(this)"><h4><span class="tag or">03</span> Third-Party Risk (TPRM)</h4><span class="ch">▼</span></div><div class="ex-b"><div class="ex-c">
+<p><strong>Expanded vendor map:</strong> Custodians, MPC providers, node infrastructure, chain analytics, contract auditors, oracle providers, stablecoin issuers, exchanges, bridges, KYC providers.</p>
+<p><strong>Requirements:</strong> Key custody controls, incident SLAs, audit reports, code audit scope, upgrade governance. <strong>Concentration risk</strong> — many "independent" vendors share same cloud/HSM/MPC stack. Right-to-audit + breach notification for on-chain incidents.</p>
+</div></div></div>
+
+<div class="ex"><div class="ex-h" onclick="toggleEx(this)"><h4><span class="tag or">04</span> Legal, Compliance &amp; Regulatory</h4><span class="ch">▼</span></div><div class="ex-b"><div class="ex-c">
+<p><strong>Token classification:</strong> E-money token, ART, deposit, security, stored value, prepaid — varies by jurisdiction. MiCA classifies explicitly; U.S. has GENIUS Act framework.</p>
+<p><strong>Redemption:</strong> Enforceable 1:1 rights, timing, fees, reserve segregation, insolvency treatment.</p>
+<p><strong>Financial crime:</strong> AML/sanctions on transparent but pseudonymous networks requires new monitoring and typologies.</p>
+<p><strong>Privacy:</strong> On-chain permanence vs. privacy laws — minimize PII on-chain. <strong>Cross-border:</strong> Activity is global-by-default.</p>
+</div></div></div>
+
+<div class="ex"><div class="ex-h" onclick="toggleEx(this)"><h4><span class="tag id">05</span> Model Risk (MRM)</h4><span class="ch">▼</span></div><div class="ex-b"><div class="ex-c">
+<p><strong>New/amplified models:</strong> Blockchain tx monitoring (risk scoring, clustering, velocity), liquidity/run risk (redemption forecasting, depeg stress), market risk (haircuts, oracle reliability), credit (counterparty exposure, wrong-way risk).</p>
+<p><strong>Distinct risks:</strong> Label leakage/feedback loops (bad actors adapt), vendor-model dependence (black-box AML analytics), data lineage issues (forks, reorgs, attribution uncertainty).</p>
+</div></div></div>
+
+<div class="ex"><div class="ex-h" onclick="toggleEx(this)"><h4><span class="tag rd">06</span> Credit Risk</h4><span class="ch">▼</span></div><div class="ex-b"><div class="ex-c">
+<p><strong>Who is the obligor?</strong> Holding stablecoins = issuer/reserve exposure. Lending against tokenized collateral = liquidation mechanics + oracle + market depth. Credit to stablecoin-using fintech = monitor ALM mismatch.</p>
+<p><strong>Credit events look different:</strong> A depeg is a credit signal (reserve impairment, redemption friction) before realized losses.</p>
+</div></div></div>
+
+<div class="ex"><div class="ex-h" onclick="toggleEx(this)"><h4><span class="tag or">07</span> Market Risk</h4><span class="ch">▼</span></div><div class="ex-b"><div class="ex-c">
+<p>Not just "price volatility": <strong>basis risk</strong> (stablecoin vs. reference), <strong>liquidity impact</strong> in stress (on-chain liquidity evaporates), <strong>oracle risk</strong> (feeds lag, manipulated, or fail).</p>
+</div></div></div>
+
+<div class="ex"><div class="ex-h" onclick="toggleEx(this)"><h4><span class="tag rd">08</span> Liquidity Risk (ALM)</h4><span class="ch">▼</span></div><div class="ex-b"><div class="ex-c">
+<p><strong>The most immediate banking concern.</strong> Stablecoins create faster, always-on "digital runs." Instant 24/7 redemption shortens outflow management time. Issuers must assume stress outflows at any time, including weekends. Basel standards (Jan 2026) influence treatment.</p>
+</div></div></div>
+
+<div class="ex"><div class="ex-h" onclick="toggleEx(this)"><h4><span class="tag or">09</span> Finance, Accounting &amp; Treasury</h4><span class="ch">▼</span></div><div class="ex-b"><div class="ex-c">
+<p><strong>Accounting:</strong> Recognition depends on legal form (cash equiv vs. financial asset vs. intangible). Reserve attestation/audit becomes part of reporting controls. Revenue: fees, float, staking rewards need policy.</p>
+<p><strong>Treasury:</strong> Intraday liquidity management becomes continuous. Atomic settlement reduces some risks, adds protocol dependency.</p>
+</div></div></div>
+
+<div class="ex"><div class="ex-h" onclick="toggleEx(this)"><h4><span class="tag or">10</span> Partners, Payments &amp; BaaS Ecosystems</h4><span class="ch">▼</span></div><div class="ex-b"><div class="ex-c">
+<p><strong>Compound risk:</strong> Bank (accounts + compliance) + fintech (UX) + stablecoin issuer (token + reserves) + chain (settlement). Contracts must allocate: KYC/KYB, sanctions screening, monitoring, error resolution, disclosures, complaints, incidents.</p>
+<p><strong>Patterns to watch:</strong> Regulatory arbitrage temptation. Yield/rewards programs resembling deposit substitution triggering scrutiny and business-model risk.</p>
+</div></div></div>
+
+<h3>Heat Map by Institution</h3>
+<div class="rm">
+<div class="c hd"></div><div class="c hd">Banks</div><div class="c hd">Credit Unions</div><div class="c hd">Fintechs / BaaS</div>
+<div class="c rl">Key Management</div><div class="c hi">High — custodial</div><div class="c md">Medium — CUSO</div><div class="c hi">High — self-custody</div>
+<div class="c rl">Smart Contract</div><div class="c md">Medium — limited</div><div class="c lo">Low — vendor</div><div class="c hi">High — DeFi</div>
+<div class="c rl">Settlement</div><div class="c hi">High — regulatory</div><div class="c md">Medium</div><div class="c md">Medium</div>
+<div class="c rl">Counterparty</div><div class="c hi">High — balance sheet</div><div class="c md">Medium</div><div class="c hi">High — revenue</div>
+<div class="c rl">Regulatory</div><div class="c hi">High — multi-agency</div><div class="c hi">High — NCUA+state</div><div class="c hi">High — licensing</div>
+<div class="c rl">Operational</div><div class="c md">Medium — mature ops</div><div class="c hi">High — limited staff</div><div class="c md">Medium — tech-native</div>
+<div class="c rl">Liquidity (ALM)</div><div class="c hi">High — 24/7 runs</div><div class="c md">Medium</div><div class="c hi">High — fast cycles</div>
+</div>
+</div></section><div class="sep"></div>
+
+<!-- 03 INSTITUTIONS -->
+<section class="section" id="institutions"><div class="section-inner reveal">
+<div class="section-label" data-num="03">By Institution Type</div>
+<h2>How Risk Functions Change</h2>
+
+<div class="tabs"><div class="tab-buttons">
+<button class="tab-btn active" data-tab="i-bank">Banks</button>
+<button class="tab-btn" data-tab="i-cu">Credit Unions</button>
+<button class="tab-btn" data-tab="i-fin">Fintechs</button>
+<button class="tab-btn" data-tab="i-baas">BaaS</button>
+</div>
+<div class="tab-panel active" id="panel-i-bank">
+<div class="card-grid">
+<div class="ic"><div class="icon">📋</div><h4>BSA/AML Expansion</h4><p>Update risk assessment for blockchain typologies. Train BSA officers on on-chain monitoring. SARs must include wallet addresses + tx hashes. Integrate analytics with case management.</p></div>
+<div class="ic"><div class="icon">🏛️</div><h4>Capital &amp; Liquidity</h4><p>Basel Group 1b (stablecoins meeting criteria) vs Group 2 (1250% risk weight). Capital planning must incorporate. ALM: assume 24/7 stress outflows.</p></div>
+<div class="ic"><div class="icon">🔍</div><h4>Exam Readiness</h4><p>Board-approved strategy, risk appetite, 3LoD coverage, TPRM for all blockchain vendors, incident response for digital asset scenarios.</p></div>
+<div class="ic"><div class="icon">⚖️</div><h4>Consumer Protection</h4><p>Reg E may apply. UDAAP for fee disclosures. Fair lending analysis if access varies. Stablecoin ≠ deposit disclosures.</p></div>
+</div>
+<div class="co"><div class="co-t">Pre-notification required</div><p>National banks (OCC), state member (Fed), FDIC-supervised must notify primary regulator <strong>before</strong> digital asset activities. Build into project timeline.</p></div>
+</div>
+<div class="tab-panel" id="panel-i-cu">
+<div class="card-grid">
+<div class="ic"><div class="icon">📊</div><h4>NCUA Expectations</h4><p>FCUs shouldn't directly invest in crypto. CUSO path requires notification, updated agreements, risk assessments.</p></div>
+<div class="ic"><div class="icon">🤝</div><h4>CUSO Risk</h4><p>CUSO-led = you still own risk. TPRM: tech stack, security, contract audits, key mgmt, insurance, financial stability.</p></div>
+<div class="ic"><div class="icon">👥</div><h4>Staff Gap</h4><p>Most CU compliance = zero blockchain expertise. Immediate: BSA officer training, board education, contract/hire for specialty.</p></div>
+</div>
+</div>
+<div class="tab-panel" id="panel-i-fin">
+<div class="card-grid">
+<div class="ic"><div class="icon">📜</div><h4>Licensing</h4><p>47+ state MTLs, FinCEN MSB, BitLicense. Or partner with licensed entity (Zero Hash, Bridge).</p></div>
+<div class="ic"><div class="icon">🔄</div><h4>Monitoring at Scale</h4><p>Millions of monthly txns. Real-time OFAC, pattern detection, SAR workflow, Travel Rule.</p></div>
+<div class="ic"><div class="icon">🛡️</div><h4>Consumer Risk</h4><p>Users may not know they're on blockchain. Disclose: not FDIC insured, irreversible, depeg possible.</p></div>
+<div class="ic"><div class="icon">📈</div><h4>Compliance as Moat</h4><p>Robust BSA + clean audits + regulator relationships = win bank partnerships + enterprise clients.</p></div>
+</div>
+</div>
+<div class="tab-panel" id="panel-i-baas">
+<div class="card-grid">
+<div class="ic"><div class="icon">🏗️</div><h4>Sponsor Oversight</h4><p>Sponsor bank = ultimately responsible. Platform must provide real-time visibility + ability to halt any tenant instantly.</p></div>
+<div class="ic"><div class="icon">📊</div><h4>Tenant Tiering</h4><p>Tier 1: internal settlement. Tier 2: user wallets. Tier 3: DeFi/yield. Different monitoring intensity per tier.</p></div>
+<div class="ic"><div class="icon">🔐</div><h4>Three-Way Recon</h4><p>On-chain balance ↔ internal ledger ↔ FBO account. All must match continuously. Alert on any discrepancy.</p></div>
+<div class="ic"><div class="icon">⚡</div><h4>Incident Chain</h4><p>BaaS detects → sponsor decides → BaaS executes → fintech informed. Document in agreements. Test quarterly.</p></div>
+</div>
+</div></div>
+</div></section><div class="sep"></div>
+
+<!-- 04 AML -->
+<section class="section" id="aml"><div class="section-inner reveal">
+<div class="section-label" data-num="04">AML &amp; Sanctions</div>
+<h2>On-Chain Transaction Monitoring</h2>
+
+<div class="fl"><div class="fl-s">Incoming Tx</div><span class="fl-a">→</span><div class="fl-s">OFAC Screen</div><span class="fl-a">→</span><div class="fl-s">Risk Score</div><span class="fl-a">→</span><div class="fl-s">Pattern Analysis</div><span class="fl-a">→</span><div class="fl-s ok">Pass → Execute</div></div>
+<div class="fl"><span class="fl-a" style="visibility:hidden">→→</span><span class="fl-a" style="visibility:hidden">→→</span><span class="fl-a">↘</span><div class="fl-s alert">Flag → Review</div><span class="fl-a">→</span><div class="fl-s alert">SAR if warranted</div></div>
+
+<h3>Blockchain AML Typologies</h3>
+<div class="ex open"><div class="ex-h" onclick="toggleEx(this)"><h4><span class="tag rd">Typology</span> Chain-Hopping</h4><span class="ch">▼</span></div><div class="ex-b"><div class="ex-c">
+<p><strong>Pattern:</strong> Funds hop across chains via bridges/DEXs. ETH → USDC → bridge Arbitrum → USDT → Tron → off-ramp.</p>
+<p><strong>Detection:</strong> Cross-chain analytics correlating bridge deposits/withdrawals. Timing correlations.</p>
+<p><strong>Rule:</strong> Flag >3 cross-chain transfers in 24hr, or same value (±5%) across >2 chains within 1hr.</p>
+</div></div></div>
+<div class="ex"><div class="ex-h" onclick="toggleEx(this)"><h4><span class="tag rd">Typology</span> Mixer / Tumbler</h4><span class="ch">▼</span></div><div class="ex-b"><div class="ex-c">
+<p><strong>Pattern:</strong> Funds pooled in mixing contract, withdrawn to fresh unlinked addresses.</p>
+<p><strong>Rule:</strong> Block txns to/from known mixer contracts. Flag indirect exposure within 2 hops. Tornado Cash = OFAC-sanctioned.</p>
+</div></div></div>
+<div class="ex"><div class="ex-h" onclick="toggleEx(this)"><h4><span class="tag rd">Typology</span> Peel Chains</h4><span class="ch">▼</span></div><div class="ex-b"><div class="ex-c">
+<p><strong>Pattern:</strong> Large sum peeled into small txns across chain of wallets. Consolidation at destination.</p>
+<p><strong>Rule:</strong> Flag source sending >10 txns to unique addresses in 24hr, individual <$3K but aggregate >$10K.</p>
+</div></div></div>
+<div class="ex"><div class="ex-h" onclick="toggleEx(this)"><h4><span class="tag rd">Typology</span> DeFi Layering</h4><span class="ch">▼</span></div><div class="ex-b"><div class="ex-c">
+<p><strong>Pattern:</strong> Funds routed through DEX → lending → borrow → swap → liquidity pool. Complex multi-step obfuscation.</p>
+<p><strong>Rule:</strong> Flag >5 DeFi protocol interactions in 48hr with net outflow >$50K.</p>
+</div></div></div>
+
+<h3>Travel Rule</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">Travel Rule Flow</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+<pre><span class="cmt">// FATF: transfers ≥ $3,000 require counterparty info</span>
+
+<span class="kw">OUTGOING</span> (you → external):
+  <span class="num">1.</span> Collect originator info
+  <span class="num">2.</span> <span class="fn">chainalysis.identify</span>(dest) → <span class="str">"Coinbase"</span>
+  <span class="num">3.</span> <span class="fn">notabene.send</span>({ originator, beneficiary, amount })
+  <span class="num">4.</span> If <span class="kw">self-hosted wallet</span> (no VASP):
+     → Enhanced DD + risk-score address + manual review
+
+<span class="kw">INCOMING</span> (external → you):
+  <span class="num">1.</span> Check for Travel Rule message
+  <span class="num">2.</span> Present → validate, store, link to tx
+  <span class="num">3.</span> Missing → screen address, request from VASP</pre></div>
+</div></section><div class="sep"></div>
+
+<!-- 05 EXAM -->
+<section class="section" id="exam"><div class="section-inner reveal">
+<div class="section-label" data-num="05">Examination Readiness</div>
+<h2>What Examiners Will Ask</h2>
+
+<div class="tabs"><div class="tab-buttons">
+<button class="tab-btn active" data-tab="e-gov">Governance</button>
+<button class="tab-btn" data-tab="e-risk">Risk Mgmt</button>
+<button class="tab-btn" data-tab="e-ops">Operations</button>
+<button class="tab-btn" data-tab="e-bsa">BSA/AML</button>
+<button class="tab-btn" data-tab="e-con">Consumer</button>
+</div>
+<div class="tab-panel active" id="panel-e-gov">
+<p>• Board-approved digital asset strategy?</p><p>• Quantitative risk appetite limits?</p><p>• Board reporting frequency on digital asset risk?</p><p>• Board training on blockchain?</p><p>• Designated senior mgmt owner?</p><p>• Regulator notified before commencing?</p><p>• Alignment with overall strategic plan?</p><p>• New product approval process?</p>
+<div class="co"><div class="co-t">Prep tip</div><p>Create a <strong>Digital Asset Board Package:</strong> strategy doc, risk appetite, quarterly dashboard, notification docs, committee minutes. Ready before examiners arrive.</p></div>
+</div>
+<div class="tab-panel" id="panel-e-risk">
+<p>• Risk assessment (inherent, controls, residual)?</p><p>• Three lines of defense structure + org charts?</p><p>• KRIs tracked?</p><p>• ERM framework incorporation?</p><p>• Independent smart contract assessment?</p><p>• Internal audit plan coverage?</p><p>• Risk limits monitoring/enforcement?</p>
+</div>
+<div class="tab-panel" id="panel-e-ops">
+<p>• Key management architecture? HSM? Recovery procedure?</p><p>• DR plan? RTO/RPO?</p><p>• Reconciliation: on-chain vs internal? Frequency? Discrepancy handling?</p><p>• Change management for contract deploys?</p><p>• TPRM for all blockchain vendors?</p><p>• Pen testing on wallet infra/APIs?</p><p>• Incident response: key compromise, chain outage, depeg, sanctions hit?</p><p>• Signing separation of duties?</p>
+</div>
+<div class="tab-panel" id="panel-e-bsa">
+<p>• BSA risk assessment covers digital assets?</p><p>• Blockchain analytics tools + TMS integration?</p><p>• Sample SARs with wallet addresses/tx hashes?</p><p>• OFAC screening for wallet addresses?</p><p>• Travel Rule implementation?</p><p>• CDD/EDD for digital asset customers?</p><p>• Self-hosted wallet handling?</p><p>• Staff training on blockchain typologies?</p>
+</div>
+<div class="tab-panel" id="panel-e-con">
+<p>• Stablecoin risk disclosures (no FDIC, depeg, irreversibility)?</p><p>• Complaint handling for digital asset products?</p><p>• Fair lending analysis?</p><p>• Fee structure disclosures?</p><p>• Wrong-address recovery process?</p><p>• Marketing accuracy on returns/risk/insurance?</p>
+</div></div>
+</div></section><div class="sep"></div>
+
+<!-- 06 FRAMEWORKS -->
+<section class="section" id="frameworks"><div class="section-inner reveal">
+<div class="section-label" data-num="06">Frameworks &amp; Standards</div>
+<h2>Regulatory Inventory</h2>
+
+<div style="overflow-x:auto"><table class="ct"><thead><tr><th>Source</th><th>Document</th><th>Key Relevance</th><th>Applies To</th></tr></thead><tbody>
+<tr><td>OCC/FDIC/Fed</td><td>Joint Statement (Jan 2023)</td><td>Risks, safety-soundness, notification</td><td>All banks</td></tr>
+<tr><td>OCC</td><td>Letters 1170, 1174, 1179</td><td>Custody, stablecoins, payment networks</td><td>National banks</td></tr>
+<tr><td>Basel</td><td>Crypto-Asset Prudential (Dec 2022)</td><td>Capital: Group 1a/1b/2. Disclosure Jan 2026</td><td>Intl banks</td></tr>
+<tr><td>FATF</td><td>VASP Guidance (Oct 2021)</td><td>Travel Rule, self-hosted wallets</td><td>All VASPs/FIs</td></tr>
+<tr><td>NCUA</td><td>22-CU-07</td><td>CU digital asset activities, CUSO</td><td>FCUs</td></tr>
+<tr><td>FinCEN</td><td>CVC Guidance (2019)</td><td>BSA obligations</td><td>All FIs, MSBs</td></tr>
+<tr><td>EU</td><td>MiCA</td><td>EMTs, ARTs, CASP licensing</td><td>EU institutions</td></tr>
+<tr><td>FSB</td><td>Crypto Recommendations</td><td>Global baseline, cross-border</td><td>Global</td></tr>
+<tr><td>U.S. Congress</td><td>GENIUS / STABLE Acts</td><td>Stablecoin issuance, reserves</td><td>Issuers, banks</td></tr>
+</tbody></table></div>
+
+<div class="co c"><div class="co-t">Framework mapping exercise</div><p>For each activity: map to <strong>(1)</strong> applicable regulation, <strong>(2)</strong> risk taxonomy domain, <strong>(3)</strong> three-lines-of-defense owners, <strong>(4)</strong> specific controls. This = your <strong>Digital Asset Risk Control Matrix</strong> — the single most useful exam document.</p></div>
+</div></section><div class="sep"></div>
+
+<!-- 07 TOOLING -->
+<section class="section" id="tooling"><div class="section-inner reveal">
+<div class="section-label" data-num="07">Compliance Tooling</div>
+<h2>Technical Infrastructure</h2>
+
+<div class="card-grid">
+<div class="ic"><div class="icon">🔍</div><h4>Blockchain Analytics</h4><p><strong>Chainalysis</strong> KYT + Reactor. <strong>TRM Labs</strong> cross-chain. <strong>Elliptic</strong> DeFi tracing. Sub-second OFAC screening APIs.</p></div>
+<div class="ic"><div class="icon">🔐</div><h4>Key Mgmt / Custody</h4><p><strong>Fireblocks</strong> MPC + policy. <strong>Fordefi</strong> institutional MPC. <strong>CloudHSM / Luna</strong> FIPS 140-2 L3. <strong>Anchorage</strong> OCC-chartered custodian.</p></div>
+<div class="ic"><div class="icon">📡</div><h4>Travel Rule</h4><p><strong>Notabene</strong> leading platform. <strong>Sygna</strong> Asia-focused. <strong>TRISA</strong> open-source protocol.</p></div>
+<div class="ic"><div class="icon">📊</div><h4>Transaction Monitoring</h4><p>Integrate analytics into existing TMS (NICE Actimize, Oracle FCCM) or purpose-built crypto TMS. Rules must support blockchain typologies.</p></div>
+<div class="ic"><div class="icon">📋</div><h4>Case Mgmt &amp; SARs</h4><p>Handle blockchain data: addresses, tx hashes, chain IDs, block explorer screenshots. Train investigators on Chainalysis/TRM reports.</p></div>
+<div class="ic"><div class="icon">🔄</div><h4>Reconciliation</h4><p>Automated on-chain ↔ internal ↔ custodian/bank comparison. Multi-chain, multi-token, pending txns, bridge in-flight. Alert on any delta.</p></div>
+</div>
+
+<div class="code-block"><div class="code-header"><span class="code-lang">Compliance Pipeline</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+<pre><span class="kw">STEP 1: PRE-TX SCREENING</span> <span class="cmt">(synchronous — blocks execution)</span>
+  ├─ <span class="fn">chainalysis.kyt.screen</span>(dest) → risk_score, sanctions
+  ├─ <span class="fn">ofac.check</span>(dest) → match / no_match
+  └─ <span class="fn">velocity.check</span>(sender, amount)
+
+  <span class="kw">IF</span> sanctions:  → <span class="num">BLOCK</span> + auto SAR + alert BSA + audit log
+  <span class="kw">IF</span> high_risk:  → <span class="str">HOLD</span> for review queue
+  <span class="kw">IF</span> clear:      → <span class="fn">PROCEED</span>
+
+<span class="kw">STEP 2: TRAVEL RULE</span> <span class="cmt">(if ≥ $3K)</span>
+  └─ <span class="fn">notabene.send</span>({ originator, beneficiary })
+
+<span class="kw">STEP 3: EXECUTE</span>
+  └─ <span class="fn">wallet.sign_and_broadcast</span>(tx) → record hash
+
+<span class="kw">STEP 4: POST-TX</span> <span class="cmt">(async)</span>
+  ├─ Monitor dest 30 days
+  └─ Monthly aggregate reporting</pre></div>
+</div></section><div class="sep"></div>
+
+<!-- 08 PLAYBOOK -->
+<section class="section" id="playbook"><div class="section-inner reveal">
+<div class="section-label" data-num="08">Implementation Playbook</div>
+<h2>Phased Approach</h2>
+
+<div class="ex open"><div class="ex-h" onclick="toggleEx(this)"><h4><span class="tag or">Phase 1</span> Foundation (Months 1–3)</h4><span class="ch">▼</span></div><div class="ex-b"><div class="ex-c">
+<p><strong>Objective:</strong> Governance + risk framework + regulatory footing before any activity.</p>
+<p>• Board-approved strategy + risk appetite statement</p>
+<p>• Digital asset risk assessment (inherent, controls, residual)</p>
+<p>• Regulatory notification to primary regulator</p>
+<p>• 3LoD role mapping</p>
+<p>• Vendor selection (Chainalysis or TRM)</p>
+<p>• BSA/AML program update</p>
+<p>• Board + senior mgmt training</p>
+<p><strong>Milestone:</strong> Examiner notification sent and acknowledged.</p>
+</div></div></div>
+<div class="ex"><div class="ex-h" onclick="toggleEx(this)"><h4><span class="tag tl">Phase 2</span> Core Controls (Months 3–6)</h4><span class="ch">▼</span></div><div class="ex-b"><div class="ex-c">
+<p><strong>Objective:</strong> Minimum viable compliance for safe launch.</p>
+<p>• Key management deployed (HSM/MPC, multi-sig)</p>
+<p>• OFAC screening pipeline (real-time, pre-tx)</p>
+<p>• TM rules — top 5 blockchain typologies</p>
+<p>• Travel Rule integration (Notabene)</p>
+<p>• Reconciliation engine (on-chain ↔ off-chain)</p>
+<p>• Incident runbooks (key compromise, depeg, sanctions, outage)</p>
+<p>• TPRM for all blockchain vendors</p>
+<p>• Consumer disclosures reviewed by legal</p>
+<p><strong>Milestone:</strong> Compliance sign-off for limited pilot.</p>
+</div></div></div>
+<div class="ex"><div class="ex-h" onclick="toggleEx(this)"><h4><span class="tag id">Phase 3</span> Scale &amp; Mature (Months 6–12)</h4><span class="ch">▼</span></div><div class="ex-b"><div class="ex-c">
+<p>• TM rule tuning (false positives, DeFi-specific)</p>
+<p>• Cross-chain analytics</p>
+<p>• First internal audit completed</p>
+<p>• Regulatory reporting automation</p>
+<p>• Stress testing (mass depeg, insolvency, chain outage)</p>
+<p>• KRI dashboard for board</p>
+<p>• Exam preparation package</p>
+<p><strong>Milestone:</strong> First exam with digital asset scope — no findings.</p>
+</div></div></div>
+<div class="ex"><div class="ex-h" onclick="toggleEx(this)"><h4><span class="tag pk">Phase 4</span> Optimize (12+ Months)</h4><span class="ch">▼</span></div><div class="ex-b"><div class="ex-c">
+<p>• ML anomaly detection on top of rules</p>
+<p>• Automated reporting + filing</p>
+<p>• Multi-stablecoin with per-issuer risk policies</p>
+<p>• DeFi protocol risk framework (fintechs)</p>
+<p>• Compliance API for tenants (BaaS)</p>
+<p>• Industry standards participation</p>
+<p><strong>Milestone:</strong> Compliance becomes competitive differentiator.</p>
+</div></div></div>
+
+<div class="co"><div class="co-t">Final principle</div><p>Institutions that succeed treat risk and compliance as <strong>enablers, not blockers</strong>. Well-built compliance gives confidence to move faster, credibility for regulatory trust, and resilience when things go wrong. Build it right from the start.</p></div>
+</div></section>
+
+<footer class="footer"><p>Risk &amp; Compliance for Digital Assets — Part 3 of 3</p><p style="margin-top:.4rem">For risk, compliance &amp; engineering teams</p></footer>
+
+<script>
+document.querySelectorAll('.tab-btn').forEach(b=>{b.addEventListener('click',function(){const g=this.closest('.tabs');g.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));g.querySelectorAll('.tab-panel').forEach(x=>x.classList.remove('active'));this.classList.add('active');const p=g.querySelector('#panel-'+this.dataset.tab);if(p)p.classList.add('active')})});
+function toggleEx(h){h.closest('.ex').classList.toggle('open')}
+function copyCode(b){const p=b.closest('.code-block').querySelector('pre');navigator.clipboard.writeText(p.innerText).then(()=>{b.textContent='Copied!';setTimeout(()=>b.textContent='Copy',1500)})}
+const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible')})},{threshold:.1});document.querySelectorAll('.reveal').forEach(e=>obs.observe(e));
+const secs=document.querySelectorAll('.section[id]'),navs=document.querySelectorAll('.nav-links a');window.addEventListener('scroll',()=>{let c='';secs.forEach(s=>{if(pageYOffset>=s.offsetTop-100)c=s.id});navs.forEach(l=>{l.classList.remove('active');if(l.getAttribute('href')==='#'+c)l.classList.add('active')})});
+</script>
+</body>
+</html>

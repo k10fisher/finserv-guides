@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stablecoins in Financial Services — Deep Dive</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,400&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0c10;--bg2:#12151c;--bg3:#1a1e28;--bgc:#161a24;--cy:#00e5c8;--am:#f0a830;--ro:#f05365;--bl:#4a9eff;--gn:#22c55e;--t1:#e8eaf0;--t2:#8a90a0;--tm:#555c70;--bd:#252a38;--bl2:#2e3548}
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}body{background:var(--bg);color:var(--t1);font-family:'IBM Plex Sans',sans-serif;font-weight:400;line-height:1.7;overflow-x:hidden}::selection{background:rgba(0,229,200,.25)}::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--bl2);border-radius:3px}
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,12,16,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--bd);padding:0 2rem}.nav-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px}.nav-logo{font-family:'DM Mono',monospace;font-size:.8rem;letter-spacing:.15em;text-transform:uppercase;color:var(--cy)}.nav-logo em{color:var(--am);font-style:normal}.nav-links{display:flex;gap:.2rem;list-style:none;flex-wrap:wrap}.nav-links a{color:var(--t2);text-decoration:none;font-size:.74rem;font-weight:500;padding:.35rem .6rem;border-radius:4px;transition:all .2s}.nav-links a:hover,.nav-links a.active{color:var(--t1);background:var(--bg3)}
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:8rem 2rem 4rem;position:relative;background:radial-gradient(ellipse at 15% 50%,rgba(240,168,48,.06) 0%,transparent 50%),radial-gradient(ellipse at 75% 20%,rgba(0,229,200,.04) 0%,transparent 50%)}.hero::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 99px,var(--bd) 99px,var(--bd) 100px),repeating-linear-gradient(90deg,transparent,transparent 99px,var(--bd) 99px,var(--bd) 100px);opacity:.12;pointer-events:none}.hero-content{max-width:1000px;margin:0 auto;position:relative;z-index:1}.hero-tag{font-family:'DM Mono',monospace;font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;color:var(--am);margin-bottom:2rem;display:flex;align-items:center;gap:.75rem}.hero-tag::before{content:'';width:32px;height:1px;background:var(--am)}.hero h1{font-family:'Fraunces',serif;font-size:clamp(2.4rem,5vw,4.2rem);font-weight:700;line-height:1.1;margin-bottom:1.5rem}.hero h1 span{background:linear-gradient(135deg,var(--am),var(--cy));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.hero-sub{font-size:1.12rem;color:var(--t2);max-width:700px;line-height:1.8;font-weight:300}.hero-meta{margin-top:3rem;display:flex;gap:2rem;font-family:'DM Mono',monospace;font-size:.72rem;color:var(--tm);flex-wrap:wrap}.hero-meta strong{color:var(--t2);font-weight:500}
+.section{padding:5.5rem 2rem}.section-inner{max-width:1100px;margin:0 auto}.section-label{font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--am);margin-bottom:1rem;display:flex;align-items:center;gap:.75rem}.section-label::before{content:attr(data-num);display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border:1px solid var(--am);border-radius:4px;font-size:.65rem}.section h2{font-family:'Fraunces',serif;font-size:clamp(1.7rem,3.5vw,2.5rem);font-weight:500;margin-bottom:1.5rem;line-height:1.2}.section h3{font-family:'Fraunces',serif;font-size:1.12rem;margin:2rem 0 1rem;font-weight:500}.section p{color:var(--t2);font-size:.97rem;max-width:780px;line-height:1.8;margin-bottom:1.2rem;font-weight:300}.section p strong{color:var(--t1);font-weight:500}
+.tabs{margin-top:2rem}.tab-buttons{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.5rem;border-bottom:1px solid var(--bd);padding-bottom:1rem}.tab-btn{background:none;border:1px solid var(--bd);color:var(--t2);font-family:'IBM Plex Sans',sans-serif;font-size:.82rem;font-weight:500;padding:.5rem 1.1rem;border-radius:6px;cursor:pointer;transition:all .25s}.tab-btn:hover{border-color:var(--tm);color:var(--t1)}.tab-btn.active{background:var(--am);color:var(--bg);border-color:var(--am);font-weight:600}.tab-panel{display:none;animation:fu .3s ease}.tab-panel.active{display:block}@keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+pre{padding:1.2rem;overflow-x:auto;font-family:'DM Mono',monospace;font-size:.78rem;line-height:1.7;color:var(--t2)}.code-block{background:var(--bg2);border:1px solid var(--bd);border-radius:8px;overflow:hidden;margin:1.5rem 0}.code-header{display:flex;align-items:center;justify-content:space-between;padding:.6rem 1rem;background:var(--bg3);border-bottom:1px solid var(--bd)}.code-lang{font-family:'DM Mono',monospace;font-size:.68rem;color:var(--am);letter-spacing:.1em;text-transform:uppercase}.code-copy{background:none;border:1px solid var(--bd);color:var(--tm);font-family:'DM Mono',monospace;font-size:.65rem;padding:.25rem .6rem;border-radius:4px;cursor:pointer;transition:all .2s}.code-copy:hover{color:var(--t1)}.kw{color:var(--cy)}.str{color:var(--am)}.cmt{color:var(--tm);font-style:italic}.fn{color:var(--bl)}.num{color:var(--ro)}
+table.ct{width:100%;border-collapse:collapse;margin:2rem 0;font-size:.83rem}table.ct th{font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--am);text-align:left;padding:.7rem .9rem;border-bottom:2px solid var(--bl2);background:var(--bg2)}table.ct td{padding:.7rem .9rem;border-bottom:1px solid var(--bd);color:var(--t2);vertical-align:top}table.ct tr:hover td{background:rgba(240,168,48,.02)}table.ct td:first-child{font-weight:500;color:var(--t1)}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.2rem;margin:2rem 0}.ic{background:var(--bgc);border:1px solid var(--bd);border-radius:10px;padding:1.6rem;transition:all .3s;overflow:hidden;position:relative}.ic::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--am),transparent);opacity:0;transition:opacity .3s}.ic:hover{border-color:var(--bl2);transform:translateY(-3px);box-shadow:0 8px 25px rgba(0,0,0,.2)}.ic:hover::before{opacity:1}.ic .icon{font-size:1.4rem;margin-bottom:.6rem}.ic h4{font-family:'Fraunces',serif;font-size:1rem;font-weight:500;margin-bottom:.4rem}.ic p{font-size:.83rem;color:var(--tm);line-height:1.6;max-width:none}
+.ex{border:1px solid var(--bd);border-radius:8px;margin-bottom:.7rem;overflow:hidden}.ex-h{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.2rem;cursor:pointer;background:var(--bg2);transition:background .2s;user-select:none}.ex-h:hover{background:var(--bg3)}.ex-h h4{font-size:.9rem;font-weight:500;display:flex;align-items:center;gap:.7rem}.ex-h .ch{font-size:.75rem;color:var(--tm);transition:transform .25s}.ex.open .ch{transform:rotate(180deg)}.ex-b{max-height:0;overflow:hidden;transition:max-height .4s ease}.ex.open .ex-b{max-height:6000px}.ex-c{padding:1.2rem;border-top:1px solid var(--bd)}.ex-c p{font-size:.86rem;margin-bottom:.7rem}
+.tag{display:inline-block;font-family:'DM Mono',monospace;font-size:.63rem;padding:.18rem .5rem;border-radius:4px;border:1px solid;margin-right:.3rem}.tag.cy{border-color:rgba(0,229,200,.3);color:var(--cy);background:rgba(0,229,200,.06)}.tag.am{border-color:rgba(240,168,48,.3);color:var(--am);background:rgba(240,168,48,.06)}.tag.ro{border-color:rgba(240,83,101,.3);color:var(--ro);background:rgba(240,83,101,.06)}.tag.bl{border-color:rgba(74,158,255,.3);color:var(--bl);background:rgba(74,158,255,.06)}.tag.gn{border-color:rgba(34,197,94,.3);color:var(--gn);background:rgba(34,197,94,.06)}
+.co{border-left:3px solid var(--am);border-radius:0 8px 8px 0;padding:1.2rem 1.4rem;margin:1.5rem 0;background:rgba(240,168,48,.04)}.co.c{border-left-color:var(--cy);background:rgba(0,229,200,.04)}.co.d{border-left-color:var(--ro);background:rgba(240,83,101,.04)}.co.i{border-left-color:var(--bl);background:rgba(74,158,255,.04)}.co-t{font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.45rem;color:var(--am)}.co.c .co-t{color:var(--cy)}.co.d .co-t{color:var(--ro)}.co.i .co-t{color:var(--bl)}.co p{font-size:.86rem;margin-bottom:0}
+.fl{display:flex;align-items:center;gap:.45rem;flex-wrap:wrap;margin:1.4rem 0;padding:1.2rem;background:var(--bg2);border-radius:8px;border:1px solid var(--bd)}.fl-s{background:var(--bg3);border:1px solid var(--bl2);border-radius:6px;padding:.5rem .9rem;font-size:.78rem;font-weight:500;white-space:nowrap}.fl-a{color:var(--am);font-size:.85rem}
+.sep{height:1px;background:linear-gradient(90deg,transparent,var(--bl2),transparent);margin:3.5rem 0}
+.footer{padding:2.5rem 2rem;border-top:1px solid var(--bd);text-align:center}.footer p{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--tm);margin:0 auto}
+@media(max-width:768px){.nav-links{display:none}.hero{padding:6rem 1.5rem 3rem}.section{padding:3rem 1.5rem}.hero-meta{flex-direction:column;gap:.75rem}}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}.reveal.visible{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-inner"><div class="nav-logo">◈ Stablecoins × <em>FinServ</em></div><ul class="nav-links">
+<li><a href="#fundamentals">Fundamentals</a></li><li><a href="#taxonomy">Taxonomy</a></li><li><a href="#technical">Technical</a></li><li><a href="#verticals">Verticals</a></li><li><a href="#settlement">Settlement</a></li><li><a href="#risk">Risk Functions</a></li><li><a href="#regulatory">Regulatory</a></li><li><a href="#integration">Integration</a></li>
+</ul></div></nav>
+
+<section class="hero"><div class="hero-content">
+<div class="hero-tag">Technical Reference · Part 2 of 3</div>
+<h1>Stablecoins in <span>Financial Services</span></h1>
+<p class="hero-sub">How tokenized monetary instruments — stablecoins, tokenized deposits, e-money tokens — are reshaping payments, settlement, treasury, and risk functions across banks, credit unions, fintechs, and BaaS platforms. Covering mechanics, reserve architectures, regulatory frameworks, risk impacts, and integration patterns.</p>
+<div class="hero-meta"><div><strong>Audience:</strong> Engineering, Risk &amp; Compliance</div><div><strong>Depth:</strong> Technical / Strategic</div><div><strong>Scope:</strong> Banks · CUs · Fintechs · BaaS</div></div>
+</div></section>
+
+<!-- 01 FUNDAMENTALS -->
+<section class="section" id="fundamentals"><div class="section-inner reveal">
+<div class="section-label" data-num="01">Fundamentals</div>
+<h2>What Stablecoins Actually Are</h2>
+<p>Stablecoins (payment stablecoins) are <strong>tokenized monetary instruments designed to maintain a stable value</strong> — typically 1:1 with a fiat currency — via reserve backing and redemption rights. Regulators emphasize that "stablecoin" is a market term, <strong>not a guarantee of stability</strong>.</p>
+<p>They're increasingly used as: <strong>payment rails</strong> (cross-border, merchant, B2B treasury — 24/7, programmable, faster finality), <strong>settlement assets</strong> (tokenized cash legs for tokenized securities), <strong>collateral</strong> (on-chain margining, automated substitution, real-time haircuts), and <strong>tokenized deposits</strong> (banks exploring deposit-like tokens for closed/open networks).</p>
+
+<div style="overflow-x:auto"><table class="ct"><thead><tr><th>Metric</th><th>Value</th></tr></thead><tbody>
+<tr><td>Total Market Cap</td><td>$235B+</td></tr>
+<tr><td>Annual Transfer Volume</td><td>$30T+ (exceeds Visa)</td></tr>
+<tr><td>Monthly Active Addresses</td><td>~30M</td></tr>
+<tr><td>Settlement Availability</td><td>24/7/365</td></tr>
+</tbody></table></div>
+
+<h3>The Peg Mechanism</h3>
+<div class="fl"><div class="fl-s">Price &lt; $1.00</div><span class="fl-a">→</span><div class="fl-s">Buy cheap USDC</div><span class="fl-a">→</span><div class="fl-s">Redeem 1:1 at issuer</div><span class="fl-a">→</span><div class="fl-s">Buying pressure → peg restores</div></div>
+<div class="fl"><div class="fl-s">Price &gt; $1.00</div><span class="fl-a">→</span><div class="fl-s">Mint new at $1.00</div><span class="fl-a">→</span><div class="fl-s">Sell on market</div><span class="fl-a">→</span><div class="fl-s">Selling pressure → peg restores</div></div>
+</div></section><div class="sep"></div>
+
+<!-- 02 TAXONOMY -->
+<section class="section" id="taxonomy"><div class="section-inner reveal">
+<div class="section-label" data-num="02">Taxonomy</div>
+<h2>Types, Collateral &amp; Risk Profiles</h2>
+
+<div class="tabs"><div class="tab-buttons">
+<button class="tab-btn active" data-tab="s-fiat">Fiat-Backed</button>
+<button class="tab-btn" data-tab="s-crypto">Crypto-Collateral</button>
+<button class="tab-btn" data-tab="s-algo">Algorithmic</button>
+<button class="tab-btn" data-tab="s-deposit">Tokenized Deposits</button>
+<button class="tab-btn" data-tab="s-cbdc">CBDCs</button>
+</div>
+<div class="tab-panel active" id="panel-s-fiat">
+<p><span class="tag am">USDC (Circle)</span> <span class="tag am">USDT (Tether)</span> <span class="tag am">PYUSD (PayPal)</span></p>
+<p>1:1 backed by fiat and cash-equivalent reserves (T-bills, repo, bank deposits). Mint on deposit, burn on redemption. USDC reserves in segregated accounts + BlackRock Circle Reserve Fund. USDT includes commercial paper.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">Stablecoin Lifecycle</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+<pre><span class="kw">MINT</span> (fiat → stablecoin):
+  <span class="num">1.</span> Wire $1M to issuer bank  <span class="num">2.</span> AML/KYC check
+  <span class="num">3.</span> <span class="fn">mint</span>(address, 1_000_000e6)  <span class="num">4.</span> USDC in wallet
+  <span class="cmt">// Latency: T+0 to T+1 (wire speed)</span>
+
+<span class="kw">BURN</span> (stablecoin → fiat):
+  <span class="num">1.</span> Call <span class="fn">redeem</span>(1_000_000e6)  <span class="num">2.</span> Tokens burned on-chain
+  <span class="num">3.</span> Wire from reserve account  <span class="num">4.</span> $1M in bank
+  <span class="cmt">// Latency: T+0 to T+1</span>
+
+<span class="kw">TRANSFER</span> (on-chain): <span class="fn">transfer</span>(recipient, amount)
+  <span class="cmt">// Seconds · $0.01–$2.00 · 24/7/365</span></pre></div>
+</div>
+<div class="tab-panel" id="panel-s-crypto">
+<p><span class="tag cy">DAI / USDS (MakerDAO)</span> <span class="tag cy">LUSD (Liquity)</span></p>
+<p><strong>Over-collateralized</strong> (150-200%) by crypto locked in smart contract vaults. Automated liquidation if collateral drops. Fully transparent on-chain. Capital-inefficient; vulnerable to cascade liquidations. Generally not primary stablecoin for regulated institutions.</p>
+</div>
+<div class="tab-panel" id="panel-s-algo">
+<div class="co d"><div class="co-t">⚠ High risk — not for institutional use</div>
+<p><strong>Terra/UST collapse (May 2022):</strong> $18B algorithmic stablecoin → $0. "Death spiral" where redemptions caused hyperinflation of paired token. Demonstrated fundamental fragility. Proposed U.S. legislation (GENIUS/STABLE Acts) <strong>prohibits algorithmic stablecoins</strong> from qualifying as permitted payment stablecoins. Your platform should maintain an <strong>allowlist architecture</strong> that blocks these by default.</p></div>
+</div>
+<div class="tab-panel" id="panel-s-deposit">
+<p><span class="tag bl">JPM Coin</span> <span class="tag bl">EURCV (SocGen FORGE)</span></p>
+<p>Bank-issued token = <strong>bank liability</strong>, potentially deposit insurance eligible. Preserves deposit relationship, existing banking regulation, balance sheet economics. Not freely transferable — moves within closed networks. Closer to faster bank-to-bank settlement than universal digital dollar.</p>
+<div class="co c"><div class="co-t">Regulated Liability Network (RLN)</div><p>Concept tested by Citi, HSBC, Mastercard: shared ledger with tokenized deposits from multiple banks + tokenized central bank liability. Preserves two-tier banking on shared rails.</p></div>
+</div>
+<div class="tab-panel" id="panel-s-cbdc">
+<p><span class="tag bl">Digital Euro (ECB)</span> <span class="tag bl">e-CNY (PBoC)</span></p>
+<p>Central bank liability — highest-quality money. Wholesale (interbank settlement) vs. retail (consumer use). Engineering patterns overlap significantly with stablecoin infrastructure.</p>
+</div></div>
+
+<h3>Head-to-Head Comparison</h3>
+<div style="overflow-x:auto"><table class="ct"><thead><tr><th>Property</th><th>Fiat-Backed</th><th>Crypto-Collateral</th><th>Tokenized Deposit</th><th>CBDC</th></tr></thead><tbody>
+<tr><td>Issuer</td><td>Licensed non-bank</td><td>DAO / contract</td><td>Commercial bank</td><td>Central bank</td></tr>
+<tr><td>Liability of</td><td>Issuer entity</td><td>No single entity</td><td>Issuing bank</td><td>Sovereign</td></tr>
+<tr><td>Insured?</td><td>Not directly</td><td>No</td><td>Potentially (FDIC)</td><td>Sovereign guarantee</td></tr>
+<tr><td>Transferability</td><td>Open (any wallet)</td><td>Open</td><td>Closed network</td><td>Design-dependent</td></tr>
+<tr><td>Composability</td><td>High (DeFi, L2)</td><td>Highest (DeFi-native)</td><td>Limited</td><td>Design-dependent</td></tr>
+<tr><td>Regulatory clarity</td><td>Emerging (GENIUS)</td><td>Minimal</td><td>Existing bank regs</td><td>Sovereign framework</td></tr>
+</tbody></table></div>
+</div></section><div class="sep"></div>
+
+<!-- 03 TECHNICAL -->
+<section class="section" id="technical"><div class="section-inner reveal">
+<div class="section-label" data-num="03">Technical Architecture</div>
+<h2>Inside a Fiat-Backed Stablecoin</h2>
+
+<div class="code-block"><div class="code-header"><span class="code-lang">Solidity — FiatToken (USDC v2.1 simplified)</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+<pre><span class="kw">contract</span> <span class="fn">FiatToken</span> <span class="kw">is</span> ERC20, Pausable, Blacklistable {
+    <span class="kw">address public</span> masterMinter;   <span class="cmt">// controls minting</span>
+    <span class="kw">address public</span> pauser;         <span class="cmt">// emergency pause</span>
+    <span class="kw">address public</span> blacklister;    <span class="cmt">// OFAC compliance</span>
+    <span class="kw">address public</span> rescuer;        <span class="cmt">// recover stuck tokens</span>
+
+    <span class="cmt">// Blacklist: freeze sanctioned addresses instantly</span>
+    <span class="kw">function</span> <span class="fn">blacklist</span>(<span class="kw">address</span> acct) <span class="kw">external</span> onlyBlacklister {
+        blacklisted[acct] = <span class="kw">true</span>;
+    }
+    <span class="cmt">// Transfer: checks blacklist + pause state</span>
+    <span class="kw">function</span> <span class="fn">transfer</span>(<span class="kw">address</span> to, <span class="num">uint256</span> val) <span class="kw">public override</span>
+        whenNotPaused notBlacklisted(msg.sender) notBlacklisted(to)
+        <span class="kw">returns</span> (<span class="kw">bool</span>) { <span class="kw">return super</span>.<span class="fn">transfer</span>(to, val); }
+    <span class="cmt">// Pause: halt ALL transfers globally</span>
+    <span class="kw">function</span> <span class="fn">pause</span>() <span class="kw">external</span> onlyPauser { _pause(); }
+}</pre></div>
+
+<div class="co d"><div class="co-t">Critical for engineers: administrative functions</div><p>Fiat-backed stablecoins have <strong>blacklist</strong> (freeze any address), <strong>pause</strong> (halt all transfers globally), and <strong>seizure</strong> capabilities. Your integration must handle: what if a customer's USDC is frozen? What if all transfers pause for hours? Design graceful degradation paths.</p></div>
+
+<h3>Multi-Chain Deployment</h3>
+<div style="overflow-x:auto"><table class="ct"><thead><tr><th>Chain</th><th>USDC Supply</th><th>Finality</th><th>Cost</th><th>Best For</th></tr></thead><tbody>
+<tr><td>Ethereum L1</td><td>~$37B</td><td>~12 min</td><td>$1–$15</td><td>Large settlements, DeFi</td></tr>
+<tr><td>Solana</td><td>~$12B</td><td>~400ms</td><td>&lt;$0.01</td><td>High-frequency, payments</td></tr>
+<tr><td>Arbitrum / Base</td><td>~$8B</td><td>~250ms soft</td><td>$0.01–$0.10</td><td>App-layer, retail</td></tr>
+<tr><td>Stellar</td><td>~$2B</td><td>~5 sec</td><td>&lt;$0.001</td><td>Remittances</td></tr>
+<tr><td>Tron (USDT)</td><td>~$60B</td><td>~3 sec</td><td>&lt;$1</td><td>Emerging markets</td></tr>
+</tbody></table></div>
+<div class="co c"><div class="co-t">Native vs. bridged</div><p>Prefer <strong>natively issued</strong> tokens over bridged ones. Circle's CCTP enables native burn-and-mint across chains without third-party bridge risk.</p></div>
+</div></section><div class="sep"></div>
+
+<!-- 04 VERTICALS -->
+<section class="section" id="verticals"><div class="section-inner reveal">
+<div class="section-label" data-num="04">Financial Verticals</div>
+<h2>Stablecoins Across Institution Types</h2>
+
+<div class="tabs"><div class="tab-buttons">
+<button class="tab-btn active" data-tab="vb">Banks</button>
+<button class="tab-btn" data-tab="vc">Credit Unions</button>
+<button class="tab-btn" data-tab="vf">Fintechs</button>
+<button class="tab-btn" data-tab="vx">BaaS</button>
+</div>
+<div class="tab-panel active" id="panel-vb">
+<div class="card-grid">
+<div class="ic"><div class="icon">🏦</div><h4>Interbank Settlement</h4><p>Tokenized deposits/stablecoins for RTGS. Eliminates nostro prefunding. JPM Coin: $2B+/day.</p></div>
+<div class="ic"><div class="icon">🌍</div><h4>Cross-Border</h4><p>USDC-based corridors at fraction of SWIFT cost. Minutes vs. days.</p></div>
+<div class="ic"><div class="icon">💰</div><h4>Treasury Ops</h4><p>Intraday liquidity across time zones at 2am. Continuous liquidity management replaces batch.</p></div>
+<div class="ic"><div class="icon">🔐</div><h4>Custody Services</h4><p>Institutional stablecoin custody. BNY Mellon, State Street, Standard Chartered.</p></div>
+</div>
+</div>
+<div class="tab-panel" id="panel-vc">
+<div class="card-grid">
+<div class="ic"><div class="icon">🤝</div><h4>Member Transfers</h4><p>Instant cross-CU transfers without ACH batch settlement.</p></div>
+<div class="ic"><div class="icon">🔄</div><h4>Shared Branching</h4><p>Real-time atomic settlement for shared branching networks (CO-OP).</p></div>
+<div class="ic"><div class="icon">🌐</div><h4>Remittances</h4><p>Low-cost corridors via USDC on Stellar. Compete with Western Union.</p></div>
+</div>
+<div class="co"><div class="co-t">CU practical path</div><p>CUSO-led infrastructure. A CUSO issues or integrates stablecoins on behalf of member CUs, handling compliance and key management centrally.</p></div>
+</div>
+<div class="tab-panel" id="panel-vf">
+<div class="card-grid">
+<div class="ic"><div class="icon">⚡</div><h4>Payment Rails</h4><p>USDC as settlement layer. Stripe/Bridge acquisition. Near-zero cost, instant finality.</p></div>
+<div class="ic"><div class="icon">📈</div><h4>Yield Products</h4><p>On-chain lending (Aave, Compound), T-bill tokens (Ondo USDY). Yield/rewards programs can resemble <strong>deposit substitution</strong> — triggers heightened scrutiny.</p></div>
+<div class="ic"><div class="icon">🔄</div><h4>On/Off-Ramp</h4><p>Fiat ↔ stablecoin via MoonPay, Ramp, Sardine APIs.</p></div>
+<div class="ic"><div class="icon">🌍</div><h4>Global Payroll</h4><p>Pay contractors globally, bypassing correspondent banking.</p></div>
+</div>
+</div>
+<div class="tab-panel" id="panel-vx">
+<div class="card-grid">
+<div class="ic"><div class="icon">⚙️</div><h4>Real-Time Settlement</h4><p>Replace nightly batch between sponsor bank and fintechs. On-chain balances = transparent float.</p></div>
+<div class="ic"><div class="icon">🔍</div><h4>Transparent Float</h4><p>Every dollar's location verifiable on-chain. Instant auditability for sponsor banks.</p></div>
+<div class="ic"><div class="icon">🔧</div><h4>Programmable Flows</h4><p>Smart contract-governed FBO management, escrow, conditional releases.</p></div>
+</div>
+<div class="co c"><div class="co-t">BaaS reconciliation solved</div><p>Core BaaS failure mode — inability to reconcile which dollars belong to which fintech. Stablecoins: each tenant's funds in dedicated smart contract accounts, sponsor bank with read access to all positions. Three-way reconciliation: on-chain ↔ internal ledger ↔ FBO account.</p></div>
+</div></div>
+</div></section><div class="sep"></div>
+
+<!-- 05 SETTLEMENT -->
+<section class="section" id="settlement"><div class="section-inner reveal">
+<div class="section-label" data-num="05">Settlement &amp; Payment Flows</div>
+<h2>How Money Actually Moves</h2>
+
+<div style="overflow-x:auto"><table class="ct"><thead><tr><th>Rail</th><th>Time</th><th>Finality</th><th>Availability</th><th>Cost</th></tr></thead><tbody>
+<tr><td>ACH</td><td>T+1 to T+2</td><td>Provisional (60-day)</td><td>Business days</td><td>$0.20–$1.50</td></tr>
+<tr><td>Fedwire</td><td>Minutes</td><td>Final &amp; irrevocable</td><td>Business days 21.5hr</td><td>$0.25–$25</td></tr>
+<tr><td>FedNow</td><td>Seconds</td><td>Final &amp; irrevocable</td><td>24/7/365</td><td>$0.01–$0.045</td></tr>
+<tr><td>SWIFT</td><td>T+1 to T+5</td><td>Varies</td><td>Business days</td><td>$15–$50+</td></tr>
+<tr><td style="color:var(--am)">Stablecoin L2</td><td style="color:var(--am)">Seconds</td><td>Final on-chain</td><td>24/7/365</td><td style="color:var(--am)">$0.001–$0.10</td></tr>
+<tr><td style="color:var(--am)">Stablecoin L1</td><td style="color:var(--am)">Minutes</td><td>Final on-chain</td><td>24/7/365</td><td>$0.50–$15</td></tr>
+</tbody></table></div>
+
+<h3>Cross-Border: SWIFT vs. Stablecoin</h3>
+<div class="fl"><div class="fl-s">Traditional SWIFT</div></div>
+<div class="fl"><div class="fl-s">Sender Bank</div><span class="fl-a">→</span><div class="fl-s">Correspondent 1</div><span class="fl-a">→</span><div class="fl-s">Correspondent 2</div><span class="fl-a">→</span><div class="fl-s">Beneficiary Bank</div></div>
+<p style="font-size:.82rem;color:var(--tm);">⏱ 1-5 business days · 💰 $15-$50+ · 🔍 Limited visibility</p>
+<div class="fl"><div class="fl-s">Stablecoin</div></div>
+<div class="fl"><div class="fl-s">Sender (fiat)</div><span class="fl-a">→</span><div class="fl-s">Mint USDC</div><span class="fl-a">→</span><div class="fl-s">On-chain transfer</div><span class="fl-a">→</span><div class="fl-s">Redeem</div><span class="fl-a">→</span><div class="fl-s">Recipient (fiat)</div></div>
+<p style="font-size:.82rem;color:var(--tm);">⏱ Minutes-hours · 💰 &lt;$1 · 🔍 Real-time on-chain tracking</p>
+</div></section><div class="sep"></div>
+
+<!-- 06 RISK FUNCTIONS -->
+<section class="section" id="risk"><div class="section-inner reveal">
+<div class="section-label" data-num="06">Impact on Risk Functions</div>
+<h2>How Stablecoins Change Every Risk Domain</h2>
+<p>Stablecoins don't just add new risks — they change how <strong>existing risk functions</strong> operate. Here's the complete risk-function map.</p>
+
+<div class="ex open"><div class="ex-h" onclick="toggleEx(this)"><h4><span class="tag ro">06a</span> Credit Risk — Who Is the Obligor?</h4><span class="ch">▼</span></div><div class="ex-b"><div class="ex-c">
+<p><strong>Holding stablecoins:</strong> Your exposure is to the issuer/reserve structure + enforceability of redemption rights.</p>
+<p><strong>Lending against tokenized collateral:</strong> You inherit liquidation mechanics (smart contract execution, oracle pricing, on-chain market depth).</p>
+<p><strong>Credit to fintech using stablecoins:</strong> Monitor asset-liability mismatch, run sensitivity, reliance on single issuer/chain.</p>
+<p><strong>Credit events look different:</strong> A "depeg" can be a credit signal (reserve impairment, redemption friction, legal injunction) even before realized losses.</p>
+</div></div></div>
+
+<div class="ex"><div class="ex-h" onclick="toggleEx(this)"><h4><span class="tag am">06b</span> Market Risk — Beyond Price Volatility</h4><span class="ch">▼</span></div><div class="ex-b"><div class="ex-c">
+<p>• <strong>Basis risk</strong> — Gap between stablecoin price and reference currency (temporary or persistent)</p>
+<p>• <strong>Liquidity/price impact</strong> — On-chain liquidity can evaporate quickly in stressed conditions</p>
+<p>• <strong>Oracle risk</strong> — Market values determined by feeds that can lag, be manipulated, or fail</p>
+</div></div></div>
+
+<div class="ex"><div class="ex-h" onclick="toggleEx(this)"><h4><span class="tag ro">06c</span> Liquidity Risk (ALM) — The Most Immediate Concern</h4><span class="ch">▼</span></div><div class="ex-b"><div class="ex-c">
+<p>Stablecoins create faster, always-on <strong>"digital runs."</strong> Instant redemption 24/7 shortens time to manage outflows. If issuing a stablecoin or tokenized deposit, ALM must assume stress outflows <strong>at any time, including weekends</strong>. Intraday liquidity management becomes continuous. Basel cryptoasset standards influence treatment and disclosures (Jan 2026).</p>
+</div></div></div>
+
+<div class="ex"><div class="ex-h" onclick="toggleEx(this)"><h4><span class="tag bl">06d</span> Model Risk (MRM)</h4><span class="ch">▼</span></div><div class="ex-b"><div class="ex-c">
+<p>Stablecoins create/amplify models in: <strong>blockchain transaction monitoring</strong> (risk scoring, clustering, velocity), <strong>liquidity/run risk</strong> (redemption forecasting, depeg stress), <strong>market risk</strong> (haircuts, oracle reliability), <strong>credit</strong> (counterparty exposure, wrong-way risk).</p>
+<p><strong>Distinct model risks:</strong> Label leakage and feedback loops (bad actors adapt). Vendor-model dependence (many AML analytics are black box). Data lineage issues from forks, reorgs, address attribution uncertainty.</p>
+</div></div></div>
+
+<div class="ex"><div class="ex-h" onclick="toggleEx(this)"><h4><span class="tag am">06e</span> Finance, Accounting &amp; Treasury</h4><span class="ch">▼</span></div><div class="ex-b"><div class="ex-c">
+<p><strong>Recognition &amp; measurement</strong> depend on legal form (cash equivalent vs financial asset vs intangible). <strong>Reserve accounting</strong> and attestation/audit become part of financial reporting controls. <strong>Revenue recognition:</strong> transaction fees, float/rebate structures require policy clarity. Circle earned ~$1.7B in reserve income in 2024.</p>
+<p><strong>Treasury:</strong> Intraday liquidity management becomes continuous. Atomic settlement reduces some risks but introduces protocol/contract dependency.</p>
+</div></div></div>
+</div></section><div class="sep"></div>
+
+<!-- 07 REGULATORY -->
+<section class="section" id="regulatory"><div class="section-inner reveal">
+<div class="section-label" data-num="07">Regulatory Framework</div>
+<h2>Compliance Landscape</h2>
+
+<div class="tabs"><div class="tab-buttons">
+<button class="tab-btn active" data-tab="r-us">U.S. Legislation</button>
+<button class="tab-btn" data-tab="r-eu">EU / MiCA</button>
+<button class="tab-btn" data-tab="r-aml">AML / Sanctions</button>
+</div>
+<div class="tab-panel active" id="panel-r-us">
+<p><strong>GENIUS Act (Senate):</strong> Establishes framework for "permitted payment stablecoin issuers" — banks/credit unions and certain nonbanks under oversight. Requires 1:1 reserves (cash, T-bills, repos), monthly attestations, annual audits. Prohibits algorithmic stablecoins.</p>
+<p><strong>STABLE Act (House):</strong> Similar framework with differences in state vs. federal pathways.</p>
+<p><strong>Engineering impact:</strong> Reserve management systems must track composition in real-time, generate attestation reports, enforce asset-type restrictions.</p>
+</div>
+<div class="tab-panel" id="panel-r-eu">
+<p><strong>MiCA</strong> (in effect since June 2024 for stablecoins) explicitly classifies:</p>
+<p>• <strong>E-Money Tokens (EMTs):</strong> Pegged to single fiat. Must be issued by authorized credit institution or e-money institution. 1:1 reserves. Direct redemption rights.</p>
+<p>• <strong>Asset-Referenced Tokens (ARTs):</strong> Pegged to basket. Stricter: own funds, reserve management, governance.</p>
+</div>
+<div class="tab-panel" id="panel-r-aml">
+<p><strong>Transaction monitoring:</strong> On-chain patterns — structuring, layering through wallets, mixer interaction, high-risk jurisdictions. <strong>Tools:</strong> Chainalysis, TRM Labs, Elliptic.</p>
+<p><strong>Travel Rule:</strong> Transfers ≥$3,000 require originator/beneficiary info. Protocols: TRISA, Notabene, Shyft, Sygna.</p>
+<p><strong>OFAC:</strong> Screen every wallet address against SDN list pre-transaction. OFAC has designated specific Ethereum addresses.</p>
+<p><strong>Self-hosted wallets:</strong> No counterparty for Travel Rule data. Enhanced due diligence required.</p>
+</div></div>
+</div></section><div class="sep"></div>
+
+<!-- 08 INTEGRATION -->
+<section class="section" id="integration"><div class="section-inner reveal">
+<div class="section-label" data-num="08">Integration Patterns</div>
+<h2>Building the Technical Stack</h2>
+
+<div class="code-block"><div class="code-header"><span class="code-lang">Compliance Pipeline</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+<pre><span class="kw">EVENT:</span> User initiates stablecoin transfer
+
+<span class="kw">STEP 1: PRE-TX SCREENING</span> <span class="cmt">(synchronous — blocks execution)</span>
+  ├─ <span class="fn">chainalysis.kyt.screen</span>(dest_address) → risk_score
+  ├─ <span class="fn">ofac.check</span>(dest_address) → match / no_match
+  └─ <span class="fn">velocity.check</span>(sender, amount) → within_limits
+
+  <span class="kw">IF</span> sanctions_match: → <span class="ro">BLOCK</span> + auto SAR + alert BSA
+  <span class="kw">IF</span> high_risk:       → <span class="am">HOLD</span> for manual review
+  <span class="kw">IF</span> clear:           → <span class="gn">PROCEED</span>
+
+<span class="kw">STEP 2: TRAVEL RULE</span> <span class="cmt">(if ≥ $3,000)</span>
+  ├─ <span class="fn">notabene.identify_vasp</span>(dest) → <span class="str">"Coinbase"</span>
+  └─ <span class="fn">notabene.send</span>({ originator, beneficiary, amount })
+
+<span class="kw">STEP 3: EXECUTE</span>
+  ├─ <span class="fn">wallet.sign_and_broadcast</span>(tx)
+  └─ Update ledger (pending → confirmed on finality)
+
+<span class="kw">STEP 4: POST-TX MONITORING</span> <span class="cmt">(async)</span>
+  ├─ Monitor dest_address 30 days
+  ├─ Pattern analysis: structuring, layering
+  └─ Monthly aggregate risk reporting</pre></div>
+
+<h3>Risk-Based De-Peg Playbook</h3>
+<div class="ex open"><div class="ex-h" onclick="toggleEx(this)"><h4><span class="tag ro">Scenario</span> Stablecoin Depegs to $0.95</h4><span class="ch">▼</span></div><div class="ex-b"><div class="ex-c">
+<p><strong>Immediate (0-1 hr):</strong> Automated monitoring triggers alert. Halt new customer deposits in affected stablecoin. Switch payment routing to alternative stablecoin (if multi-coin supported). Notify sponsor bank (if BaaS).</p>
+<p><strong>Assessment (1-4 hr):</strong> Determine cause: market panic vs. reserve impairment vs. issuer insolvency. Check issuer attestation status. Evaluate on-chain redemption queue depth.</p>
+<p><strong>Escalation (4-24 hr):</strong> If reserve impairment suspected: initiate redemption of institution's holdings. If prolonged: trigger contingency plan for customer communications. Consider SAR filing if fraud indicators present.</p>
+<p><strong>Recovery:</strong> Post-incident review. Update risk limits. Adjust stablecoin allowlist if needed. Report to board risk committee.</p>
+</div></div></div>
+
+<div class="co c"><div class="co-t">Getting started checklist</div>
+<p><strong>(1)</strong> Choose stablecoin — USDC default for regulated use. <strong>(2)</strong> Choose chain — start with one L2 (Base/Arbitrum). <strong>(3)</strong> Wallet infra — Circle Programmable Wallets or Fireblocks. <strong>(4)</strong> Compliance screening — Chainalysis or TRM. <strong>(5)</strong> Event processing — webhook handler + ledger sync. <strong>(6)</strong> Testnet first. <strong>(7)</strong> Chain/asset allowlist policy. <strong>(8)</strong> 24/7 incident playbooks.</p></div>
+</div></section>
+
+<footer class="footer"><p>Stablecoins in Financial Services — Part 2 of 3</p><p style="margin-top:.4rem">For engineering, risk &amp; compliance teams</p></footer>
+
+<script>
+document.querySelectorAll('.tab-btn').forEach(b=>{b.addEventListener('click',function(){const g=this.closest('.tabs');g.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));g.querySelectorAll('.tab-panel').forEach(x=>x.classList.remove('active'));this.classList.add('active');const p=g.querySelector('#panel-'+this.dataset.tab);if(p)p.classList.add('active')})});
+function toggleEx(h){h.closest('.ex').classList.toggle('open')}
+function copyCode(b){const p=b.closest('.code-block').querySelector('pre');navigator.clipboard.writeText(p.innerText).then(()=>{b.textContent='Copied!';setTimeout(()=>b.textContent='Copy',1500)})}
+const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible')})},{threshold:.1});document.querySelectorAll('.reveal').forEach(e=>obs.observe(e));
+const secs=document.querySelectorAll('.section[id]'),navs=document.querySelectorAll('.nav-links a');window.addEventListener('scroll',()=>{let c='';secs.forEach(s=>{if(pageYOffset>=s.offsetTop-100)c=s.id});navs.forEach(l=>{l.classList.remove('active');if(l.getAttribute('href')==='#'+c)l.classList.add('active')})});
+</script>
+</body>
+</html>
